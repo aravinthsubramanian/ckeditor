@@ -171,9 +171,8 @@
                             <h6 class="mb-4">Add Products</h6>
 
 
-                            <form name="images-upload-form" method="POST"
-                                action="{{ url('admin/product/add') }}" accept-charset="utf-8"
-                                enctype="multipart/form-data">
+                            <form name="images-upload-form" method="POST" action="{{ url('admin/product/add') }}"
+                                accept-charset="utf-8" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="product" class="form-label">Product</label>
@@ -203,8 +202,8 @@
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example" id="catagory_name"
-                                        name="catagory_name">
+                                    <select class="form-control select2" aria-label="Default select example"
+                                        id="catagory_name" name="catagory_name">
                                         <option value="" selected></option>
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
@@ -219,12 +218,13 @@
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Sub Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example" id="subcatagory_name"
-                                        name="subcatagory_name">
+                                    <select class="form-control select2" aria-label="Default select example"
+                                        id="subcatagory_name" name="subcatagory_name">
                                         <option value="" selected></option>
                                         @foreach ($subcatagory as $subcata)
                                             @if ($subcata->subcatagory_status == 'enable')
-                                                <option value="{{ $subcata->catagory }}">{{ $subcata->catagory }}</option>
+                                                <option value="{{ $subcata->catagory }}">{{ $subcata->catagory }}
+                                                </option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -239,7 +239,7 @@
                                         <label for="Specifications" class="form-label">Specifications</label>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" name="addMoreInputFields[0][specfication]"
+                                        <td><input type="text" name="addMoreInputFields[0][specification]"
                                                 class="form-control" />
                                         </td>
                                         <td><button type="button" name="add" id="dynamic-ar"
@@ -247,6 +247,9 @@
                                             </button></td>
                                     </tr>
                                 </table>
+                                @error('addMoreInputFields.*.specification')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
 
 
                                 <div class="mb-3">
@@ -294,6 +297,10 @@
             <!-- Footer End -->
         </div>
         <!-- Content End -->
+
+        
+
+
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

@@ -37,7 +37,7 @@ class ProductController extends Controller
             'description' => 'required',
             'catagory_name' => 'required',
             'subcatagory_name' => 'required',
-        'addMoreInputFields.*.specfication' => 'required',
+            'addMoreInputFields.*.specification' => 'required',
         ]);
 
         // dd($request->all());
