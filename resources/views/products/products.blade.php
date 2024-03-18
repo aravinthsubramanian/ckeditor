@@ -167,95 +167,65 @@
                                     class="btn btn-primary">+Add</a></div>
                             <br>
 
-                            @foreach ($products as $product)
-                                <div class="card shadow-0 border rounded-3 mb-3">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0"
-                                                style="width: 15%;height:15%">
-                                                <div id="carouselExampleAutoplaying" class="carousel slide"
-                                                    data-bs-ride="carousel">
-                                                    <div class="carousel-inner">
-
-                                                        @foreach ($product_image as $image)
-                                                            @if ($product->unique_id == $image->unique_id)
-                                                                <div class="carousel-item active">
-                                                                    <img src="{{ asset('/storage/' . $image->path) }}"class="d-block w-100"
-                                                                        alt="...">
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-
-
-                                                        {{-- <div class="carousel-item">
-                                                        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1915&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                                            class="d-block w-100" alt="...">
-                                                    </div>
-                                                    <div class="carousel-item">
-                                                        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1915&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                                            class="d-block w-100" alt="...">
-                                                    </div> --}}
-
-                                                    </div>
-                                                    <button class="carousel-control-prev" type="button"
-                                                        data-bs-target="#carouselExampleAutoplaying"
-                                                        data-bs-slide="prev">
-                                                        <span class="carousel-control-prev-icon"
-                                                            aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Previous</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button"
-                                                        data-bs-target="#carouselExampleAutoplaying"
-                                                        data-bs-slide="next">
-                                                        <span class="carousel-control-next-icon"
-                                                            aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Next</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="col md-6">
-                                                <div class="row">
-                                                    <div class="d-flex flex-row">
-                                                        <div class="col">
-                                                            <h3>{{ $product->product }}</h3>
-                                                            <h6>{{ '₹' . $product->cost }}</h6>
-                                                        </div>
-                                                        <div class="d-flex flex-row mt-2 ms-2">
-                                                            <a href="{{ url('/admin/product/update/' . $product->id) }}"
-                                                                style="margin-right: 3mm"><i
-                                                                    class="bi bi-pencil-fill"></i></a>
-                                                            <a class="delete"
-                                                                href="{{ url('admin/product/delete/' . $product->id) }}"><i
-                                                                    class="bi bi-trash-fill"></i></a>
-
-                                                            <form class="delete" action="{{ url('admin/product/delete/' . $product->id) }}" method="GET">
-                                                                        @csrf
-                                                                        <input type="hidden" name="_method" value="DELETE">
-                                                                        <input type="submit" value="Delete User">
-                                                                    </form>
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mt-1 mb-0 text-muted small">
-                                                    @foreach ($product_spec as $spec)
-                                                        @if ($product->unique_id == $spec->unique_id)
-                                                            <span>✦</span><span
-                                                                style="padding-left: 1mm;padding-right: 3mm">{{ $spec->specification }}</span>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">S.No</th>
+                                            <th scope="col">Images</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Cost</th>
+                                            <th scope="col">Specifications</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Catagory</th>
+                                            <th scope="col">Sub catagory</th>
+                                            {{-- <th scope="col">Created at</th>
+                                            <th scope="col">Updated at</th> --}}
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $sn = 1; ?>
+                                        @foreach ($products as $product)
+                                            <tr>
+                                                <th scope="row">{{ $sn++ }}</th>
+                                                <td>
+                                                    @foreach ($product_image as $image)
+                                                        @if ($product->unique_id == $image->unique_id)
+                                                            <img src="{{ asset('/storage/' . $image->path) }}"
+                                                                width="30%" height="30%" alt="...">
                                                         @endif
                                                     @endforeach
-                                                </div>
-                                                <br>
-                                                <p class="textarea mb-4 mb-md-0">
-                                                    {{ $product->description }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                                                </td>
+                                                <td>{{ $product->product }}</td>
+                                                <td>{{ $product->description }}</td>
+                                                <td>{{ $product->cost }}</td>
+                                                <td>
+                                                    @foreach ($product_spec as $spec)
+                                                        @if ($product->unique_id == $spec->unique_id)
+                                                            •&nbsp;{{ $spec->specification }}<br>
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $product->status }}</td>
+                                                <td>{{ $product->catagory }}</td>
+                                                <td>{{ $product->subcatagory }}</td>
+                                                {{-- <td>{{ $product->created_at }}</td>
+                                                <td>{{ $product->updated_at }}</td> --}}
+                                                <td>
+                                                    <a href="{{ url('/admin/product/edit/'.$product->id) }}" style="margin-right: 3mm"><i
+                                                            class="bi bi-pencil-fill"></i></a>
+                                                    <a href="{{ url('/admin/product/delete/'.$product->id) }}"><i class="bi bi-trash-fill"></i></a>
+                                    
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+
 
                         </div>
                     </div>
@@ -295,23 +265,6 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
-
-
-        <div class="modal" id="confirm">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p>Are you sure you, want to delete?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-primary" id="delete-btn">Delete</button>
-                        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
 
 
         <script>

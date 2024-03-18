@@ -90,6 +90,8 @@ Route::post('admin/product/add',[ProductController::class, 'newproduct']);
 Route::get('/admin/products',[ProductController::class, 'showproduct']);
 Route::get('/admin/product/delete/{id}',[ProductController::class, 'deleteproduct']);
 
+Route::get('/admin/product/edit/{id}',[ProductController::class, 'editproduct']);
+
 
 
 

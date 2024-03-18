@@ -29,16 +29,16 @@ class ProductController extends Controller
 
     public function newproduct(Request $request)
     {
-        // $request->validate([
-        //     'images' => 'required',
-        //     'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
-        //     'cost' => 'required|numeric|regex:/^\d*\.\d{1}[0-9]?$/',
-        //     'product' => 'required',
-        //     'description' => 'required',
-        //     'catagory' => 'required',
-        //     'subcatagory' => 'required',
-        // 'addMoreInputFields.*.specfication' => 'required',
-        // ]);
+        $request->validate([
+            'images' => 'required',
+            'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
+            'cost' => 'required|numeric|regex:/^\d*\.\d{1}[0-9]?$/',
+            'product' => 'required',
+            'description' => 'required',
+            'catagory_name' => 'required',
+            'subcatagory_name' => 'required',
+        'addMoreInputFields.*.specfication' => 'required',
+        ]);
 
         // dd($request->all());
 
@@ -85,5 +85,17 @@ class ProductController extends Controller
         $product_img->delete();
         $product->delete();
         return back()->with("success","Prouduct deleted successfuly....");
+    }
+
+    public function editproduct($id){
+        $product = Product::find($id);
+        $unique_id = $product->unique_id;
+        $subcatagory = SubCatagory::all();
+        $catagory = MainCatagory::all();
+
+        $product_img = Product_image::where('unique_id',$unique_id);
+        $product_spec = Product_spec::where('unique_id',$unique_id);
+
+        return view('products.editproducts', compact('product','product_img','product_spec','subcatagory', 'catagory'));
     }
 }
