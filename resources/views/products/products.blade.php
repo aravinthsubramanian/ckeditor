@@ -180,7 +180,7 @@
                                                         @foreach ($product_image as $image)
                                                             @if ($product->unique_id == $image->unique_id)
                                                                 <div class="carousel-item active">
-                                                                    <img src="{{ asset('/storage/'.$image->path) }}"class="d-block w-100"
+                                                                    <img src="{{ asset('/storage/' . $image->path) }}"class="d-block w-100"
                                                                         alt="...">
                                                                 </div>
                                                             @endif
@@ -224,8 +224,17 @@
                                                             <a href="{{ url('/admin/product/update/' . $product->id) }}"
                                                                 style="margin-right: 3mm"><i
                                                                     class="bi bi-pencil-fill"></i></a>
-                                                            <a href="{{ url('admin/product/delete/' . $product->id) }}"><i
+                                                            <a class="delete"
+                                                                href="{{ url('admin/product/delete/' . $product->id) }}"><i
                                                                     class="bi bi-trash-fill"></i></a>
+
+                                                            <form class="delete" action="{{ url('admin/product/delete/' . $product->id) }}" method="GET">
+                                                                        @csrf
+                                                                        <input type="hidden" name="_method" value="DELETE">
+                                                                        <input type="submit" value="Delete User">
+                                                                    </form>
+
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -286,6 +295,32 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+
+
+        <div class="modal" id="confirm">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Are you sure you, want to delete?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" id="delete-btn">Delete</button>
+                        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script>
+            $(".delete").on("submit", function() {
+                return confirm("Are you sure?");
+            });
+        </script>
+
+
 </body>
 
 </html>
