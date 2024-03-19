@@ -219,11 +219,6 @@
                                                             class="bi bi-pencil-fill"></i></a>
                                                     <a href="{{ url('/admin/product/delete/' . $product->id) }}"><i
                                                             class="bi bi-trash-fill"></i></a>
-
-
-
-
-
                                                 </td>
                                             </tr>
                                         @endforeach

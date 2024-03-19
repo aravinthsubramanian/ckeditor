@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2024 at 06:24 PM
+-- Generation Time: Mar 19, 2024 at 07:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -198,8 +198,8 @@ CREATE TABLE `products` (
   `description` varchar(255) NOT NULL,
   `cost` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
-  `catagory` varchar(255) NOT NULL,
-  `subcatagory` varchar(255) NOT NULL,
+  `catagory` int(11) NOT NULL,
+  `subcatagory` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -209,8 +209,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `unique_id`, `product`, `description`, `cost`, `status`, `catagory`, `subcatagory`, `created_at`, `updated_at`) VALUES
-(17, '171068862365f7096f7790e', 'Prouduct0005', 'this is third product', '420.25', 'enable', 'third', 'third', '2024-03-17 09:47:03', '2024-03-17 09:47:03'),
-(18, '171068963065f70d5e43bbd', 'Prouduct00345', 'this is third product', '420.25', 'enable', 'first', 'third', '2024-03-17 10:03:50', '2024-03-17 10:03:50');
+(17, '171068862365f7096f7790e', 'Prouduct0005', 'this is third product', '420.25', 'enable', 0, 0, '2024-03-17 09:47:03', '2024-03-17 09:47:03'),
+(20, '171074216865f7da98af430', 'product100', 'this is from office', '234.55', 'enable', 0, 0, '2024-03-18 00:39:28', '2024-03-18 00:39:28'),
+(22, '171076616365f8385398bac', 'product092', 'dcsadsad', '2347', 'enable', 0, 0, '2024-03-18 07:19:23', '2024-03-18 07:19:23');
 
 -- --------------------------------------------------------
 
@@ -237,7 +238,9 @@ INSERT INTO `product_images` (`id`, `unique_id`, `title`, `path`, `created_at`, 
 (16, '171068808765f707573cf49', 'pexels-pixabay-144234.jpg', 'images/M5knhv30Lv5SMOtwaqTSXBmWzghFh2uvkebvvA9l.jpg', NULL, NULL),
 (17, '171068841965f708a3ee1ad', 'pexels-pixabay-162140.jpg', 'images/Zh9311AV9n8pWmWmKuSTWg6v6MngPtijKTTFJg7F.jpg', NULL, NULL),
 (18, '171068862365f7096f7790e', 'pexels-pixabay-47547.jpg', 'images/KipKdq459ou60Uk2sveO7iSVwaLC6X30jKkSyM3a.jpg', NULL, NULL),
-(19, '171068963065f70d5e43bbd', 'pexels-david-dibert-635499.jpg', 'images/z37novTms4HG3EdXF835MzPrXWxRoQAqRPyzJz1w.jpg', NULL, NULL);
+(23, '171074216865f7da98af430', 'pexels-pixabay-39857.jpg', 'images/wzPJ3AlshPnWM1LmXXnhgf5sd21D9VN6K6kmZYqV.jpg', NULL, NULL),
+(26, '171076616365f8385398bac', 'pexels-david-dibert-635499.jpg', 'images/BQNAK21vSq3MvgRjPYCg0mEvvSNoFTp4qrCNsor1.jpg', NULL, NULL),
+(27, '171076616365f8385398bac', 'pexels-pixabay-34231.jpg', 'images/ocynXYa0DB5jyPi47uehA7hN9TS3ljBbMD7pzN8B.jpg', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -271,9 +274,12 @@ INSERT INTO `product_specs` (`id`, `unique_id`, `specification`, `created_at`, `
 (25, '171068862365f7096f7790e', 'one', NULL, NULL),
 (26, '171068862365f7096f7790e', 'vhjvkv', NULL, NULL),
 (27, '171068862365f7096f7790e', 'vuvyuctug', NULL, NULL),
-(28, '171068963065f70d5e43bbd', 'one', NULL, NULL),
-(29, '171068963065f70d5e43bbd', 'ted3', NULL, NULL),
-(30, '171068963065f70d5e43bbd', 'ctt657', NULL, NULL);
+(34, '171074216865f7da98af430', 'adsada', NULL, NULL),
+(35, '171074216865f7da98af430', 'asdasd', NULL, NULL),
+(36, '171074216865f7da98af430', 'asdasd', NULL, NULL),
+(40, '171076616365f8385398bac', 'fqewfewqf', NULL, NULL),
+(41, '171076616365f8385398bac', 'sadfsafsa', NULL, NULL),
+(42, '171076616365f8385398bac', 'ewfewqwq', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -295,7 +301,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('ulH8kKISLz4DL0ba928yJ7RL4OUhBSGEwxceqTkr', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUEdkZEc5M0x0SjF4MlpnZzVhbmRERjNBOVYxUkN5Tk03czR1QVRUNCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDc6Imh0dHA6Ly9sb2NhbGhvc3QvY2tlZGl0b3IvcHVibGljL2FkbWluL3Byb2R1Y3RzIjt9czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1710696103);
+('gEF4tBg89WoeFdLBnHF7ntVnWSFY7eBhsnPcEXJR', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiV1dCS2thMGVKNk16SmFZOGlQaDFPN2MzeUxRRWNkOHlNTUlRRnJRMiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTc6Imh0dHA6Ly9sb2NhbGhvc3Qvb2ZmaWNlL2NrZWRpdG9yL3B1YmxpYy9hZG1pbi9wcm9kdWN0L2FkZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1710819801),
+('jbr1TVNF9J6Ai7vVQRls4jvuCpxWnmZLuSco72fx', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQVBjbmw0S2p2VXRVWDFpY293OVBncEd0SlY1NUZuaU5qTWo0dkUzdCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTY6Imh0dHA6Ly9sb2NhbGhvc3QvaG9tZS9ja2VkaXRvci9wdWJsaWMvc3ViY2F0YWdvcnkvd2FudC81Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1710829006),
+('xYsZTq3SQVH684wjQbZYEJ5g1KZ2ndOoLF6BNEKt', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiRnVhUmJmaDkxdXhkTldXWFViOXZlbjR4bmVnQURKOVZJT2dLemU3SyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTk6Imh0dHA6Ly9sb2NhbGhvc3QvaG9tZS9ja2VkaXRvci9wdWJsaWMvYWRtaW4vc3ViY2F0YWdvcnkvYWRkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1710829001);
 
 -- --------------------------------------------------------
 
@@ -305,7 +313,7 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 
 CREATE TABLE `sub_catagories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `catagory` varchar(255) NOT NULL,
+  `catagory` int(11) NOT NULL,
   `subcatagory` varchar(255) NOT NULL,
   `subcatagory_status` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -317,10 +325,11 @@ CREATE TABLE `sub_catagories` (
 --
 
 INSERT INTO `sub_catagories` (`id`, `catagory`, `subcatagory`, `subcatagory_status`, `created_at`, `updated_at`) VALUES
-(2, 'first', 'sub22', 'dissable', '2024-03-16 22:56:09', '2024-03-16 23:29:29'),
-(3, 'third', 'sub3', 'enable', '2024-03-16 22:56:25', '2024-03-16 22:56:25'),
-(4, 'third', 'sub4', 'dissable', '2024-03-16 22:56:32', '2024-03-16 22:56:32'),
-(5, 'second', 'sub1', 'enable', '2024-03-16 23:27:14', '2024-03-16 23:27:14');
+(6, 5, 'sub1', 'enable', '2024-03-18 23:43:07', '2024-03-18 23:43:07'),
+(7, 5, 'sub2', 'dissable', '2024-03-18 23:43:14', '2024-03-18 23:43:14'),
+(8, 2, 'sub3', 'enable', '2024-03-18 23:43:21', '2024-03-18 23:43:21'),
+(9, 2, 'sub4', 'dissable', '2024-03-18 23:43:28', '2024-03-18 23:43:28'),
+(10, 5, 'sub5', 'enable', '2024-03-19 00:46:40', '2024-03-19 00:46:40');
 
 -- --------------------------------------------------------
 
@@ -490,25 +499,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `product_specs`
 --
 ALTER TABLE `product_specs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `sub_catagories`
 --
 ALTER TABLE `sub_catagories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`

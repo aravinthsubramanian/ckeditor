@@ -178,35 +178,30 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="dataTable">
+                                    <tbody>
                                         <?php $sn = 1; ?>
                                         @foreach ($subcatagory as $subcat)
                                             <tr>
                                                 <th scope="row">{{ $sn++ }}</th>
 
-                                                {{-- <td></td> --}}
+                                                <td id="colcol">{{ $subcat->catagory }}</td>
                                                 {{-- {{ $subcat->catagory }} --}}
 
+                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-                                                <script>
-                                                    < script src = "https://code.jquery.com/jquery-3.6.0.min.js" >
-                                                </script>
                                                 <script>
                                                     $(document).ready(function() {
-                                                        $.ajax({
-                                                            url: '/catagory/want/5',
-                                                            method: 'GET',
-                                                            
-                                                            success: function(response) {
-                                                                $('#dataTable tr').append(`<td>${response.catagory}</td> 
-                                                                        <!-- Display more data as needed -->
-                                                                `);
-                                                            },
-                                                            error: function(xhr, status, error) {
-                                                                console.error(error);
-                                                                // Handle errors
-                                                            }
+
+                                                        $(document).on('click', '#colcol', function() {
+                                                            $.ajax({
+                                                                url: "{{ url('/catagory/want/5') }}",
+                                                                type: "get",
+                                                                dataType: 'json',
+                                                                success: function(response) {
+                                                                    console.log(response.catagory);
+                                                                    $("#colcol").text(response.catagory);
+                                                                }
+                                                            });
                                                         });
                                                     });
                                                 </script>

@@ -75,6 +75,7 @@ Route::post('admin/catagory/update/{id}', [CatagoryController::class, 'updatecat
 Route::get('admin/catagory/delete/{id}', [CatagoryController::class, 'delete_catagory']);
 
 Route::get('catagory/want/{id}', [CatagoryController::class, 'wantcatagory']);
+Route::get('subcatagory/want/{id}', [CatagoryController::class, 'wantsubcatagory']);
 
 
 Route::get('admin/subcatagories', [CatagoryController::class, 'showsubcatagory']);

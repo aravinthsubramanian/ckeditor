@@ -36,7 +36,7 @@ class CatagoryController extends Controller
     {
         $catagory = MainCatagory::find($id);
         // dd($id);
-        return view('catagories.editcatagories',compact('catagory'));
+        return view('catagories.editcatagories', compact('catagory'));
     }
 
     public function updatecatagory(Request $request, $id)
@@ -83,7 +83,7 @@ class CatagoryController extends Controller
     {
         $catagory = MainCatagory::all();
         $subcatagory = SubCatagory::find($id);
-        return view('subcatagories.editsubcatagories', compact('catagory','subcatagory'));
+        return view('subcatagories.editsubcatagories', compact('catagory', 'subcatagory'));
     }
 
     public function addsubcatagory(Request $request)
@@ -130,8 +130,17 @@ class CatagoryController extends Controller
         return back()->with("success", "updated Successfully...");
     }
 
-    public function wantcatagory($id){
+    public function wantcatagory($id)
+    {
         $record = MainCatagory::find($id)->toJson();
+        // $record = $record->toJson();
+        // dd($record);
+        return response($record);
+    }
+
+    public function wantsubcatagory($id)
+    {
+        $record = SubCatagory::where([['catagory', $id],['subcatagory_status','enable']])->get()->toJson();
         // $record = $record->toJson();
         // dd($record);
         return response($record);
