@@ -217,8 +217,10 @@
                                                     <a href="{{ url('/admin/subcatagory/update/' . $subcat->id) }}"
                                                         style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
-                                                    <a href="{{ url('admin/subcatagory/delete/' . $subcat->id) }}"><i
-                                                            class="bi bi-trash-fill"></i></a>
+                                                    {{-- <button id="delete" class="btn btn-danger" data-category="{{ $subcat->id }}" data-toggle="modal" data-target="#deleteCategory"><i
+                                                            class="bi bi-trash-fill"></i></button> --}}
+
+                                                            <button type="button" class="btn btn-danger" data-category="{{ $subcat->id }}" data-toggle="modal" data-target="#deleteCategory">حذف</button>
                                                 </td>
                                             <tr>
                                         @endforeach
@@ -230,6 +232,35 @@
                 </div>
             </div>
             {{-- admin table end --}}
+
+
+            <div class="modal fade" id="deleteCategory" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteCategory" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <form action="{{ url('admin/subcatagory/delete/'.$subcat->id) }}">
+                        @csrf
+                        {{-- @method('DELETE') --}}
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                Are you sure you want to delete?
+                                <input type="hidden" id="category" name="category_id">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn bg-white" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                $('#delete').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    var category = button.data('category');
+                    var modal = $(this);
+                    modal.find('.modal-body #categoey').val(category);
+                });
+            </script>
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">

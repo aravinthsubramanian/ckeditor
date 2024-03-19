@@ -204,7 +204,7 @@
                                                 <td>
                                                     @foreach ($product_spec as $spec)
                                                         @if ($product->unique_id == $spec->unique_id)
-                                                            •&nbsp;{{ $spec->specification }}<br>
+                                                            {{ $spec->specification }}
                                                         @endif
                                                     @endforeach
                                                 </td>

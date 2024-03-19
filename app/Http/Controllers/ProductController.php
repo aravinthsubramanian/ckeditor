@@ -98,4 +98,70 @@ class ProductController extends Controller
 
         return view('products.editproducts', compact('product','product_img','product_spec','subcatagory', 'catagory'));
     }
+
+
+
+    public function updateproduct($id,Request $request)
+    {
+        // dd($request);
+        $request->validate([
+            // 'images' => 'required',
+            // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
+            'cost' => 'required|numeric|regex:/^\d*\.\d{1}[0-9]?$/',
+            'product' => 'required',
+            'description' => 'required',
+            'catagory_name' => 'required',
+            'subcatagory_name' => 'required',
+            'product_status' => 'required',
+            // 'addMoreInputFields.*.specification' => 'required',
+        ]);
+
+        // dd($request->all());
+        $product = Product::find($id);
+        $unique_id = $product->unique_id;
+        $product->unique_id = $product->unique_id;
+        $product->product = $request->product;
+        $product->description = $request->description;
+        $product->cost = $request->cost;
+        $product->status = $request->product_status;
+        $product->catagory = $request->catagory_name;
+        $product->subcatagory = $request->subcatagory_name;
+        $product->update();  
+
+        $product_img = Product::where('unique_id',$unique_id);
+        if ($request->hasfile('images')) {
+            foreach ($request->file('images') as $key => $file) {
+                // $insert[$key]['title'] = $file->getClientOriginalName();
+                // $insert[$key]['path'] = $file->store('images');
+                // $insert[$key]['unique_id'] = $unique_id;
+                
+                $product_img->title = $file->getClientOriginalName();
+                $product_img->path = $file->store('images');
+                $product_img->unique_id = $unique_id;
+                $product_img->update();
+            }
+        }
+        // Product_image::update($insert);
+
+        $product_spec = Product_spec::where('unique_id',$unique_id);
+        
+            foreach ($request->addMoreInputFields as $key => $value) {
+                foreach ($value as $k => $v) {
+                    // $upload[$key]['specification'] = $v;
+                    // $upload[$key]['unique_id'] = $unique_id;
+                    if($v){
+                    $product_spec->specification = $v;
+                    $product_spec->unique_id = $unique_id;
+                    $product_spec->update();
+                }
+            }
+        }
+        
+        // Product_spec::update($upload);
+
+        return back()->with("success", "Updated Successfully...");
+    }
+
+
+
 }

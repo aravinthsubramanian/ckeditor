@@ -138,11 +138,14 @@ class CatagoryController extends Controller
         return response($record);
     }
 
-    public function wantsubcatagory($id)
+    public function wantsubcatagory(Request $request)
     {
-        $record = SubCatagory::where([['catagory', $id],['subcatagory_status','enable']])->get()->toJson();
+        $record = SubCatagory::where([['catagory', $request->id],['subcatagory_status','enable']])->get();
         // $record = $record->toJson();
         // dd($record);
-        return response($record);
+        return response()->json([
+            'status' => 'success',
+            'subcategories' => $record,
+        ]);;
     }
 }

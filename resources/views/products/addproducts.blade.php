@@ -182,14 +182,38 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <input type="textarea" class="form-control" id="description" name="description"
-                                        value="{{ old('description') }}">
+                                    <textarea class="form-control" id="description" name="description"
+                                        value="{{ old('description') }}"></textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+
+                                <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
+                                <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+                                <script>
+                                    ClassicEditor
+                                        .create( document.querySelector( '#description' ) )
+                                        .catch( error => {
+                                            console.error( error );
+                                        } );
+                                </script>
+                                <script type="text/javascript">
+                                    CKEDITOR.replace('wysiwyg-editor', {
+                                        filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
+                                        filebrowserUploadMethod: 'form'
+                                    });
+                                </script>
+                                
+
+                                
+                                
+
+
+
                                 <div class="mb-3">
                                     <label for="cost" class="form-label">Cost</label>
                                     <input type="text" class="form-control" id="cost" name="cost"
@@ -227,23 +251,50 @@
                                     @enderror
                                 </div>
 
+
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Sub Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example"
+                                    <select class="form-control get_subcategory" aria-label="Default select example"
                                         id="subcatagory_name" name="subcatagory_name">
                                         <option value="" selected></option>
-                                        @foreach ($subcatagory as $subcata)
-                                            @if ($subcata->subcatagory_status == 'enable')
-                                                <option value="{{ $subcata->id }}">{{ $subcata->catagory }}
-                                                </option>
-                                            @endif
-                                        @endforeach
                                     </select>
                                     @error('subcatagory_name')
                                         <p class='text-danger'>{{ $message }}</p>
                                     @enderror
                                 </div>
 
+                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>                            
+                                <script>
+                                    $(document).ready(function() {
+                                        
+                                        $(document).on('change', '#catagory_name', function() {
+                                            let catagory_id = $(this).val();
+                                            let csrf = '{{ csrf_token() }}';
+                                            console.log(catagory_id);
+                                            $.ajax({
+                                                method: 'post',
+                                                url: "{{ route('wantsubcatagory') }}",
+                                                data: {
+                                                    _token: csrf,
+                                                    id: catagory_id
+                                                },
+                                                success: function(res) {
+                                                    console.log(res);
+                                                    if (res.status == 'success') {
+                                                        let all_options = "<option value=''></option>";
+                                                        let all_subcategories = res.subcategories;
+                                                        $.each(all_subcategories, function(index, value) {
+                                                            all_options += "<option value='" + value.id + "'>" +
+                                                                value.subcatagory + "</option>";
+                                                        });
+                                                        $(".get_subcategory").html(all_options);
+                                                    }
+                                                }
+                                            })
+                                        });
+                                    });
+                                </script>
 
                                 <table class="table table-borderless" id="dynamicAddRemove">
                                     <tr>
@@ -262,10 +313,9 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
 
-
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Images</label>
-                                    <input type="file" class="form-control" name="images[]" id="images"
+                                    <input type="file" class="form-control" name="images[]" id="upload-img"
                                         placeholder="Choose images" multiple>
                                     @error('images')
                                         <p class="text-danger">{{ $message }}</p>
@@ -276,14 +326,13 @@
                                         <label for="preview" class="form-label">Preview</label>
                                     </div>
                                     <div class="mt-1 text-center">
-                                        <div class="images-preview-div"> </div>
+                                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"> </div>
                                     </div>
                                 </div>
+
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
-
-
-
+                            
                         </div>
                     </div>
                 </div>
@@ -343,9 +392,54 @@
         </script>
 
         <style>
-            .images-preview-div img {
-                padding: 10px;
-                max-width: 100px;
+            .img-thumbs {
+                background: #eee;
+                border: 1px solid #ccc;
+                border-radius: 0.25rem;
+                margin: 1.5rem 0;
+                padding: 0.75rem;
+            }
+
+            .img-thumbs-hidden {
+                display: none;
+            }
+
+            .wrapper-thumb {
+                position: relative;
+                display: inline-block;
+                margin: 1rem 0;
+                justify-content: space-around;
+            }
+
+            .img-preview-thumb {
+                background: #fff;
+                border: 1px solid none;
+                border-radius: 0.25rem;
+                box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
+                margin-right: 1rem;
+                max-width: 140px;
+                padding: 0.25rem;
+            }
+
+            .remove-btn {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: .7rem;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: white;
+                border-radius: 10px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .remove-btn:hover {
+                box-shadow: 0px 0px 3px grey;
+                transition: all .3s ease-in-out;
             }
 
             /* Chrome, Safari, Edge, Opera */
@@ -362,25 +456,60 @@
         </style>
 
         <script>
-            $(function() {
-                // Multiple images preview with JavaScript
-                var previewImages = function(input, imgPreviewPlaceholder) {
-                    if (input.files) {
-                        var filesAmount = input.files.length;
-                        for (i = 0; i < filesAmount; i++) {
-                            var reader = new FileReader();
-                            reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
-                                    imgPreviewPlaceholder);
-                            }
-                            reader.readAsDataURL(input.files[i]);
-                        }
-                    }
-                };
-                $('#images').on('change', function() {
-                    previewImages(this, 'div.images-preview-div');
-                });
-            });
+            // $(function() {
+            //     // Multiple images preview with JavaScript
+            //     var previewImages = function(input, imgPreviewPlaceholder) {
+            //         if (input.files) {
+            //             var filesAmount = input.files.length;
+            //             for (i = 0; i < filesAmount; i++) {
+            //                 var reader = new FileReader();
+            //                 reader.onload = function(event) {
+            //                     $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
+            //                         imgPreviewPlaceholder);
+            //                 }
+            //                 reader.readAsDataURL(input.files[i]);
+            //             }
+            //         }
+            //     };
+            //     $('#images').on('change', function() {
+            //         previewImages(this, 'div.images-preview-div');
+            //     });
+            // });
+
+            var imgUpload = document.getElementById('upload-img'),
+                imgPreview = document.getElementById('img-preview'),
+                imgUploadForm = document.getElementById('form-upload'),
+                totalFiles, previewTitle, previewTitleText, img;
+
+            imgUpload.addEventListener('change', previewImgs, true);
+
+            function previewImgs(event) {
+                totalFiles = imgUpload.files.length;
+
+                if (!!totalFiles) {
+                    imgPreview.classList.remove('img-thumbs-hidden');
+                }
+
+                for (var i = 0; i < totalFiles; i++) {
+                    wrapper = document.createElement('div');
+                    wrapper.classList.add('wrapper-thumb');
+                    removeBtn = document.createElement("span");
+                    nodeRemove = document.createTextNode('x');
+                    removeBtn.classList.add('remove-btn');
+                    removeBtn.appendChild(nodeRemove);
+                    img = document.createElement('img');
+                    img.src = URL.createObjectURL(event.target.files[i]);
+                    img.classList.add('img-preview-thumb');
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    imgPreview.appendChild(wrapper);
+
+                    $('.remove-btn').click(function() {
+                        $(this).parent('.wrapper-thumb').remove();
+                    });
+
+                }
+            }
         </script>
 </body>
 

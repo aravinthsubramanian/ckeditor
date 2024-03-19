@@ -172,7 +172,7 @@
 
 
                             <form name="images-upload-form" method="POST"
-                                action="{{ url('admin/product/update/'.$product->id) }}" accept-charset="utf-8"
+                                action="{{ url('admin/product/update/' . $product->id) }}" accept-charset="utf-8"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
@@ -185,12 +185,22 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <input type="textarea" class="form-control" id="description" name="description"
-                                        value="{{ $product->description }}">
+                                    <textarea class="form-control" id="description" name="description">{{ $product->description }}</textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+                                <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+                                <script>
+                                    ClassicEditor
+                                        .create(document.querySelector('#description'))
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                </script>
+
+
                                 <div class="mb-3">
                                     <label for="cost" class="form-label">Cost</label>
                                     <input type="text" class="form-control" id="cost" name="cost"
@@ -203,12 +213,13 @@
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example" id="catagory_name"
-                                        name="catagory_name">
-                                        <option value="{{$product->catagory}}" selected>{{$product->catagory}}</option>
+                                    <select class="form-control select2" aria-label="Default select example"
+                                        id="catagory_name" name="catagory_name">
+                                        <option value="{{ $product->catagory }}" selected>{{ $product->catagory }}
+                                        </option>
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
-                                                <option value="{{ $cata->catagory }}">{{ $cata->catagory }}</option>
+                                                <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -219,21 +230,116 @@
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Sub Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example" id="subcatagory_name"
-                                        name="subcatagory_name">
-                                        <option value="{{ $product->subcatagory }}" selected>{{ $product->subcatagory }}</option>
-                                        @foreach ($subcatagory as $subcata)
-                                            @if ($subcata->subcatagory_status == 'enable')
-                                                <option value="{{ $subcata->subcatagory }}">{{ $subcata->subcatagory }}</option>
-                                            @endif
-                                        @endforeach
+                                    <select class="form-control get_subcategory" aria-label="Default select example"
+                                        id="subcatagory_name" name="subcatagory_name">
+                                        <option value="{{ $product->subcatagory }}" selected>
+                                            {{ $product->subcatagory }}</option>
                                     </select>
                                     @error('subcatagory_name')
                                         <p class='text-danger'>{{ $message }}</p>
                                     @enderror
                                 </div>
 
+                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                                <script>
+                                    $(document).ready(function() {
 
+                                        $(document).on('change', '#catagory_name', function() {
+                                            let catagory_id = $(this).val();
+                                            let csrf = '{{ csrf_token() }}';
+                                            console.log(catagory_id);
+                                            $.ajax({
+                                                method: 'post',
+                                                url: "{{ route('wantsubcatagory') }}",
+                                                data: {
+                                                    _token: csrf,
+                                                    id: catagory_id
+                                                },
+                                                success: function(res) {
+                                                    console.log(res);
+                                                    if (res.status == 'success') {
+                                                        let all_options = "<option value=''></option>";
+                                                        let all_subcategories = res.subcategories;
+                                                        $.each(all_subcategories, function(index, value) {
+                                                            all_options += "<option value='" + value.id + "'>" +
+                                                                value.subcatagory + "</option>";
+                                                        });
+                                                        $(".get_subcategory").html(all_options);
+                                                    }
+                                                }
+                                            })
+                                        });
+
+                                        // $(document).on('onload', '#subcatagory_name', function() {
+                                        
+                                        
+                                        $('#subcatagory_name').ready(function() {
+                                            let catagory_id = $('#catagory_name').val();
+                                            let subcatagory_id = $('#subcatagory_name').val();
+                                            let csrf = '{{ csrf_token() }}';
+                                            console.log(catagory_id);
+                                            $.ajax({
+                                                method: 'post',
+                                                url: "{{ route('wantsubcatagory') }}",
+                                                data: {
+                                                    _token: csrf,
+                                                    id: catagory_id
+                                                },
+                                                success: function(res) {
+                                                    console.log(res);
+                                                    if (res.status == 'success') {
+                                                        let all_options = "<option value='"+subcatagory_id+"'>"+subcatagory_id+"</option>";
+                                                        let all_subcategories = res.subcategories;
+                                                        $.each(all_subcategories, function(index, value) {
+                                                            all_options += "<option value='" + value.id + "'>" +
+                                                                value.subcatagory + "</option>";
+                                                        });
+                                                        $(".get_subcategory").html(all_options);
+                                                    }
+                                                }
+                                            })
+                                        });
+                                    });
+                                </script>
+
+
+                                <div class="mb-3">
+                                    <label for="product_status" class="form-label">Product Status</label><br>
+                                    @if ($product->status == 'enable')
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="enable" checked>
+                                            <label class="form-check-label" for="enable">Enabled</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="dissable">
+                                            <label class="form-check-label" for="disable">Dissabled</label>
+                                        </div>
+                                        @error('product_status')
+                                            <p class='text-danger'>{{ $message }}</p>
+                                        @enderror
+                                    @endif
+                                    @if ($product->status == 'dissable')
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="enable">
+                                            <label class="form-check-label" for="enable">Enabled</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="dissable" checked>
+                                            <label class="form-check-label" for="disable">Dissabled</label>
+                                        </div>
+                                        @error('product_status')
+                                            <p class='text-danger'>{{ $message }}</p>
+                                        @enderror
+                                    @endif
+                                </div>
+
+
+                                
                                 <table class="table table-borderless" id="dynamicAddRemove">
                                     <tr>
                                         <label for="Specifications" class="form-label">Specifications</label>
@@ -364,7 +470,7 @@
                 $('#images').on('change', function() {
                     previewImages(this, 'div.images-preview-div');
                 });
-                
+
             });
         </script>
 </body>

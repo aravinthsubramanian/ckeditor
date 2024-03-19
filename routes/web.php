@@ -75,7 +75,7 @@ Route::post('admin/catagory/update/{id}', [CatagoryController::class, 'updatecat
 Route::get('admin/catagory/delete/{id}', [CatagoryController::class, 'delete_catagory']);
 
 Route::get('catagory/want/{id}', [CatagoryController::class, 'wantcatagory']);
-Route::get('subcatagory/want/{id}', [CatagoryController::class, 'wantsubcatagory']);
+Route::post('subcatagory/want', [CatagoryController::class, 'wantsubcatagory'])->name('wantsubcatagory');
 
 
 Route::get('admin/subcatagories', [CatagoryController::class, 'showsubcatagory']);
@@ -95,6 +95,9 @@ Route::get('/admin/products',[ProductController::class, 'showproduct']);
 Route::get('/admin/product/delete/{id}',[ProductController::class, 'deleteproduct']);
 
 Route::get('/admin/product/edit/{id}',[ProductController::class, 'editproduct']);
+Route::post('/admin/product/update/{id}',[ProductController::class, 'updateproduct']);
 
 
 // POST......................................................................................................
+
+Route::post('ckeditor/upload', 'CKEditorController@upload')->name('ckeditor.image-upload');
