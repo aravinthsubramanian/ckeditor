@@ -18,7 +18,7 @@ class ProductController extends Controller
         $products = Product::all();
         $product_image = Product_image::all();
         $product_spec = Product_spec::all();
-        return view('products.products', compact('products','product_image','product_spec'));
+        return view('products.products', compact('products', 'product_image', 'product_spec'));
     }
     public function addproduct()
     {
@@ -52,7 +52,7 @@ class ProductController extends Controller
         $product->status = 'enable';
         $product->catagory = $request->catagory_name;
         $product->subcatagory = $request->subcatagory_name;
-        $product->save();  
+        $product->save();
 
         if ($request->hasfile('images')) {
             foreach ($request->file('images') as $key => $file) {
@@ -74,46 +74,51 @@ class ProductController extends Controller
         return back()->with("success", "Registerd Successfully...");
     }
 
-    public function deleteproduct($id){
+    public function deleteproduct($id)
+    {
         $product = Product::find($id);
+        // dd($id);
         $unique_id = $product->unique_id;
 
-        $product_img = Product_image::where('unique_id',$unique_id);
-        $product_spec = Product_spec::where('unique_id',$unique_id);
+        $product_img = Product_image::where('unique_id', $unique_id);
+        $product_spec = Product_spec::where('unique_id', $unique_id);
 
         $product_spec->delete();
         $product_img->delete();
         $product->delete();
-        return back()->with("success","Prouduct deleted successfuly....");
+        return back()->with("success", "Prouduct deleted successfuly....");
     }
 
-    public function editproduct($id){
+    public function editproduct($id)
+    {
         $product = Product::find($id);
         $unique_id = $product->unique_id;
         $subcatagory = SubCatagory::all();
         $catagory = MainCatagory::all();
+        // dd($product);
+        $product_img = Product_image::where('unique_id', $unique_id)->get();
+        // dd($product_img);
+        $product_spec = Product_spec::where('unique_id', $unique_id)->get();
+        // dd($product_spec);
 
-        $product_img = Product_image::where('unique_id',$unique_id);
-        $product_spec = Product_spec::where('unique_id',$unique_id);
-
-        return view('products.editproducts', compact('product','product_img','product_spec','subcatagory', 'catagory'));
+        return view('products.editproducts', compact('product', 'product_img', 'product_spec', 'subcatagory', 'catagory'));
     }
 
 
 
-    public function updateproduct($id,Request $request)
+    public function updateproduct($id, Request $request)
     {
         // dd($request);
         $request->validate([
-            // 'images' => 'required',
-            // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
+            'images' => 'required',
+            'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
             'cost' => 'required|numeric|regex:/^\d*\.\d{1}[0-9]?$/',
             'product' => 'required',
             'description' => 'required',
             'catagory_name' => 'required',
             'subcatagory_name' => 'required',
             'product_status' => 'required',
-            // 'addMoreInputFields.*.specification' => 'required',
+            'addMoreInputFields.*.specification' => 'required',
         ]);
 
         // dd($request->all());
@@ -126,42 +131,32 @@ class ProductController extends Controller
         $product->status = $request->product_status;
         $product->catagory = $request->catagory_name;
         $product->subcatagory = $request->subcatagory_name;
-        $product->update();  
+        $product->update();
 
-        $product_img = Product::where('unique_id',$unique_id);
+        $product_img = Product_image::where('unique_id', $unique_id);
+        $product_img->delete();
+
         if ($request->hasfile('images')) {
             foreach ($request->file('images') as $key => $file) {
-                // $insert[$key]['title'] = $file->getClientOriginalName();
-                // $insert[$key]['path'] = $file->store('images');
-                // $insert[$key]['unique_id'] = $unique_id;
-                
-                $product_img->title = $file->getClientOriginalName();
-                $product_img->path = $file->store('images');
-                $product_img->unique_id = $unique_id;
-                $product_img->update();
+                $insert[$key]['title'] = $file->getClientOriginalName();
+                $insert[$key]['path'] = $file->store('images');
+                $insert[$key]['unique_id'] = $unique_id;
             }
         }
-        // Product_image::update($insert);
+        Product_image::insert($insert);
 
-        $product_spec = Product_spec::where('unique_id',$unique_id);
-        
-            foreach ($request->addMoreInputFields as $key => $value) {
-                foreach ($value as $k => $v) {
-                    // $upload[$key]['specification'] = $v;
-                    // $upload[$key]['unique_id'] = $unique_id;
-                    if($v){
-                    $product_spec->specification = $v;
-                    $product_spec->unique_id = $unique_id;
-                    $product_spec->update();
-                }
+        $product_spec = Product_spec::where('unique_id', $unique_id);
+        $product_spec->delete();
+        foreach ($request->addMoreInputFields as $key => $value) {
+            foreach ($value as $k => $v) {
+                $upload[$key]['specification'] = $v;
+                $upload[$key]['unique_id'] = $unique_id;
             }
         }
-        
+        Product_spec::insert($upload);
+
         // Product_spec::update($upload);
 
         return back()->with("success", "Updated Successfully...");
     }
-
-
-
 }

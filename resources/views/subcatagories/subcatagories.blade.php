@@ -20,18 +20,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
+    <!-- JavaScript Libraries -->
+    
 </head>
 
 <body>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <div class="container-xxl position-relative bg-white d-flex p-0">
 
 
@@ -92,8 +98,8 @@
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
-                                style="width: 40px; height: 40px;">
+                            {{-- <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
+                                style="width: 40px; height: 40px;"> --}}
                             <span class="d-none d-lg-inline-flex">{{ Auth::guard('admin')->name }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
@@ -184,14 +190,10 @@
                                             <tr>
                                                 <th scope="row">{{ $sn++ }}</th>
 
-                                                <td id="colcol">{{ $subcat->catagory }}</td>
-                                                {{-- {{ $subcat->catagory }} --}}
+                                                <td>{{ $subcat->catagory }}</td>
 
-                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-                                                <script>
+                                                {{-- <script>
                                                     $(document).ready(function() {
-
                                                         $(document).on('click', '#colcol', function() {
                                                             $.ajax({
                                                                 url: "{{ url('/catagory/want/5') }}",
@@ -204,10 +206,7 @@
                                                             });
                                                         });
                                                     });
-                                                </script>
-
-
-
+                                                </script>  --}}
 
                                                 <td>{{ $subcat->subcatagory }}</td>
                                                 <td>{{ $subcat->subcatagory_status }}</td>
@@ -217,10 +216,12 @@
                                                     <a href="{{ url('/admin/subcatagory/update/' . $subcat->id) }}"
                                                         style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
-                                                    {{-- <button id="delete" class="btn btn-danger" data-category="{{ $subcat->id }}" data-toggle="modal" data-target="#deleteCategory"><i
-                                                            class="bi bi-trash-fill"></i></button> --}}
 
-                                                            <button type="button" class="btn btn-danger" data-category="{{ $subcat->id }}" data-toggle="modal" data-target="#deleteCategory">حذف</button>
+                                                    <a href="" data-id="{{ $subcat->id }}"
+                                                        class="delete-subcategory" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal" style="margin-right: 3mm"><i
+                                                            class="bi bi-trash-fill"></i></a>
+
                                                 </td>
                                             <tr>
                                         @endforeach
@@ -233,34 +234,34 @@
             </div>
             {{-- admin table end --}}
 
-
-            <div class="modal fade" id="deleteCategory" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="deleteCategory" aria-hidden="true">
-                <div class="modal-dialog modal-sm" role="document">
-                    <form action="{{ url('admin/subcatagory/delete/'.$subcat->id) }}">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true" data-backdrop="static" role="dialog">
+                <div class="modal-dialog">
+                    <form id="deleteForm" method="GET">
                         @csrf
-                        {{-- @method('DELETE') --}}
                         <div class="modal-content">
-                            <div class="modal-body">
-                                Are you sure you want to delete?
-                                <input type="hidden" id="category" name="category_id">
-                            </div>
+                            <div class="modal-body">Are you want to delete?</div>
                             <div class="modal-footer">
-                                <button type="button" class="btn bg-white" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">delete</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
             <script>
-                $('#delete').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget);
-                    var category = button.data('category');
-                    var modal = $(this);
-                    modal.find('.modal-body #categoey').val(category);
+                $(document).ready(function() {
+                    $('.delete-subcategory').click(function() {
+                        var subcategoryId = $(this).data('id');
+                        var deleteUrl = "{{ url('/admin/subcatagory/delete/:id') }}";
+                        deleteUrl = deleteUrl.replace(':id', subcategoryId);
+                        $('#deleteForm').attr('action', deleteUrl);
+                    });
                 });
             </script>
+
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
@@ -281,19 +282,6 @@
         </div>
         <!-- Content End -->
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/chart/chart.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
 </body>
 
 </html>

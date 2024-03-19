@@ -38,6 +38,12 @@
 </head>
 
 <body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+
     <div class="container-xxl position-relative bg-white d-flex p-0">
 
 
@@ -191,7 +197,7 @@
                                     @enderror
                                 </div>
                                 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-                                <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
                                 <script>
                                     ClassicEditor
                                         .create(document.querySelector('#description'))
@@ -240,8 +246,7 @@
                                     @enderror
                                 </div>
 
-                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
                                 <script>
                                     $(document).ready(function() {
 
@@ -271,9 +276,6 @@
                                             })
                                         });
 
-                                        // $(document).on('onload', '#subcatagory_name', function() {
-                                        
-                                        
                                         $('#subcatagory_name').ready(function() {
                                             let catagory_id = $('#catagory_name').val();
                                             let subcatagory_id = $('#subcatagory_name').val();
@@ -289,7 +291,8 @@
                                                 success: function(res) {
                                                     console.log(res);
                                                     if (res.status == 'success') {
-                                                        let all_options = "<option value='"+subcatagory_id+"'>"+subcatagory_id+"</option>";
+                                                        let all_options = "<option value='" + subcatagory_id + "'>" +
+                                                            subcatagory_id + "</option>";
                                                         let all_subcategories = res.subcategories;
                                                         $.each(all_subcategories, function(index, value) {
                                                             all_options += "<option value='" + value.id + "'>" +
@@ -339,13 +342,13 @@
                                 </div>
 
 
-                                
+
                                 <table class="table table-borderless" id="dynamicAddRemove">
                                     <tr>
                                         <label for="Specifications" class="form-label">Specifications</label>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" name="addMoreInputFields[0][specfication]"
+                                        <td><input type="text" name="addMoreInputFields[0][specification]"
                                                 class="form-control" />
                                         </td>
                                         <td><button type="button" name="add" id="dynamic-ar"
@@ -353,11 +356,13 @@
                                             </button></td>
                                     </tr>
                                 </table>
-
+                                @error('addMoreInputFields.*.specification')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
 
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Images</label>
-                                    <input type="file" class="form-control" name="images[]" id="images"
+                                    <input type="file" class="form-control" name="images[]" id="upload-img"
                                         placeholder="Choose images" multiple>
                                     @error('images')
                                         <p class="text-danger">{{ $message }}</p>
@@ -368,14 +373,11 @@
                                         <label for="preview" class="form-label">Preview</label>
                                     </div>
                                     <div class="mt-1 text-center">
-                                        <div class="images-preview-div"> </div>
-
+                                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"> </div>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
-
-
 
                         </div>
                     </div>
@@ -418,6 +420,7 @@
 
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+        
         <script type="text/javascript">
             var i = 0;
             $("#dynamic-ar").click(function() {
@@ -426,15 +429,67 @@
                     '][specification]" class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
                 );
             });
+            
             $(document).on('click', '.remove-input-field', function() {
                 $(this).parents('tr').remove();
             });
         </script>
 
+
         <style>
             .images-preview-div img {
                 padding: 10px;
                 max-width: 100px;
+            }
+
+            .img-thumbs {
+                background: #eee;
+                border: 1px solid #ccc;
+                border-radius: 0.25rem;
+                margin: 1.5rem 0;
+                padding: 0.75rem;
+            }
+
+            .img-thumbs-hidden {
+                display: none;
+            }
+
+            .wrapper-thumb {
+                position: relative;
+                display: inline-block;
+                margin: 1rem 0;
+                justify-content: space-around;
+            }
+
+            .img-preview-thumb {
+                background: #fff;
+                border: 1px solid none;
+                border-radius: 0.25rem;
+                box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
+                margin-right: 1rem;
+                max-width: 140px;
+                padding: 0.25rem;
+            }
+
+            .remove-btn {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: .7rem;
+                top: -5px;
+                right: 10px;
+                width: 20px;
+                height: 20px;
+                background: white;
+                border-radius: 10px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .remove-btn:hover {
+                box-shadow: 0px 0px 3px grey;
+                transition: all .3s ease-in-out;
             }
 
             /* Chrome, Safari, Edge, Opera */
@@ -451,28 +506,42 @@
         </style>
 
         <script>
-            $(function() {
-                // Multiple images preview with JavaScript
-                var previewImages = function(input, imgPreviewPlaceholder) {
-                    if (input.files) {
-                        var filesAmount = input.files.length;
-                        for (i = 0; i < filesAmount; i++) {
-                            var reader = new FileReader();
-                            reader.onload = function(event) {
-                                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(
-                                    imgPreviewPlaceholder);
-                            }
-                            reader.readAsDataURL(input.files[i]);
-                        }
-                    }
-                };
+            var imgUpload = document.getElementById('upload-img'),
+                imgPreview = document.getElementById('img-preview'),
+                imgUploadForm = document.getElementById('form-upload'),
+                totalFiles, previewTitle, previewTitleText, img;
 
-                $('#images').on('change', function() {
-                    previewImages(this, 'div.images-preview-div');
-                });
+            imgUpload.addEventListener('change', previewImgs, true);
 
-            });
+            function previewImgs(event) {
+                totalFiles = imgUpload.files.length;
+
+                if (!!totalFiles) {
+                    imgPreview.classList.remove('img-thumbs-hidden');
+                }
+
+                for (var i = 0; i < totalFiles; i++) {
+                    wrapper = document.createElement('div');
+                    wrapper.classList.add('wrapper-thumb');
+                    removeBtn = document.createElement("span");
+                    nodeRemove = document.createTextNode('x');
+                    removeBtn.classList.add('remove-btn');
+                    removeBtn.appendChild(nodeRemove);
+                    img = document.createElement('img');
+                    img.src = URL.createObjectURL(event.target.files[i]);
+                    img.classList.add('img-preview-thumb');
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    imgPreview.appendChild(wrapper);
+
+                    $('.remove-btn').click(function() {
+                        $(this).parent('.wrapper-thumb').remove();
+                    });
+
+                }
+            }
         </script>
+
 </body>
 
 </html>

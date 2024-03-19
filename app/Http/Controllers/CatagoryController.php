@@ -103,7 +103,7 @@ class CatagoryController extends Controller
     }
 
     public function delete_subcatagory($id)
-    {
+    {   
         $record = SubCatagory::find($id);
         // dd($id);
         if ($record) {
@@ -140,7 +140,7 @@ class CatagoryController extends Controller
 
     public function wantsubcatagory(Request $request)
     {
-        $record = SubCatagory::where([['catagory', $request->id],['subcatagory_status','enable']])->get();
+        $record = SubCatagory::where([['catagory', $request->id], ['subcatagory_status', 'enable']])->get();
         // $record = $record->toJson();
         // dd($record);
         return response()->json([
