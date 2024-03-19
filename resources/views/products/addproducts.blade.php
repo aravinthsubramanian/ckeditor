@@ -193,12 +193,23 @@
                                 <div class="mb-3">
                                     <label for="cost" class="form-label">Cost</label>
                                     <input type="text" class="form-control" id="cost" name="cost"
-                                        value="{{ old('cost') }}">
+                                        value="{{ old('cost') }}" onfocusout="myFunction()">
                                     @error('cost')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
 
+                                <script>
+                                    function myFunction() {
+                                        let inputString = parseFloat($("#cost").val());
+                                        if (!isNaN(inputString)) {
+                                            $('#cost').prop("value", inputString.toFixed(2));
+                                        } else {
+                                            inputString = 0.00;
+                                            $('#cost').prop("value", inputString.toFixed(2));
+                                        }
+                                    }
+                                </script>
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
@@ -207,7 +218,7 @@
                                         <option value="" selected></option>
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
-                                                <option value="{{ $cata->catagory }}">{{ $cata->catagory }}</option>
+                                                <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -223,7 +234,7 @@
                                         <option value="" selected></option>
                                         @foreach ($subcatagory as $subcata)
                                             @if ($subcata->subcatagory_status == 'enable')
-                                                <option value="{{ $subcata->catagory }}">{{ $subcata->catagory }}
+                                                <option value="{{ $subcata->id }}">{{ $subcata->catagory }}
                                                 </option>
                                             @endif
                                         @endforeach
@@ -298,7 +309,7 @@
         </div>
         <!-- Content End -->
 
-        
+
 
 
 

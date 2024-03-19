@@ -169,11 +169,11 @@
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
                                     <select class="form-control select2" aria-label="Default select example"
                                         id="catagory_name" name="catagory_name">
-                                        <option value="{{ $subcatagory->catagory }}" selected>
+                                        <option value="{{ $subcatagory->catagory }}" selected>{{ $subcatagory->catagory }}</option>
                                             {{ $subcatagory->catagory }}</option>
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
-                                                <option value="{{ $cata->catagory }}">{{ $cata->catagory }}</option>
+                                                <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
                                             @endif
                                         @endforeach
                                     </select>

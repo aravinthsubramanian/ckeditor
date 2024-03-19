@@ -160,7 +160,7 @@
                                         <option value="" selected></option>
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
-                                                <option value="{{ $cata->catagory }}">{{ $cata->catagory }}</option>
+                                                <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
                                             @endif
                                         @endforeach
                                     </select>

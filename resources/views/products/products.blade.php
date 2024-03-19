@@ -214,10 +214,16 @@
                                                 {{-- <td>{{ $product->created_at }}</td>
                                                 <td>{{ $product->updated_at }}</td> --}}
                                                 <td>
-                                                    <a href="{{ url('/admin/product/edit/'.$product->id) }}" style="margin-right: 3mm"><i
+                                                    <a href="{{ url('/admin/product/edit/' . $product->id) }}"
+                                                        style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
-                                                    <a href="{{ url('/admin/product/delete/'.$product->id) }}"><i class="bi bi-trash-fill"></i></a>
-                                    
+                                                    <a href="{{ url('/admin/product/delete/' . $product->id) }}"><i
+                                                            class="bi bi-trash-fill"></i></a>
+
+
+
+
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -230,6 +236,8 @@
                 </div>
             </div>
             {{-- table end --}}
+
+
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
@@ -265,19 +273,9 @@
         <script src="js/main.js"></script>
 
 
-        <div class="modal" id="confirm">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p>Are you sure you, want to delete?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-primary" id="delete-btn">Delete</button>
-                        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
+
+        
 
 
 

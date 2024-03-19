@@ -162,7 +162,8 @@
                     <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Subcatagory Details</h6>
-                            <div class=""><a href="{{ url('/admin/subcatagory/add') }}" class="btn btn-primary">+Add</a></div>
+                            <div class=""><a href="{{ url('/admin/subcatagory/add') }}"
+                                    class="btn btn-primary">+Add</a></div>
                             <br>
                             <div class="table-responsive">
                                 <table class="table">
@@ -177,20 +178,52 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="dataTable">
                                         <?php $sn = 1; ?>
                                         @foreach ($subcatagory as $subcat)
                                             <tr>
                                                 <th scope="row">{{ $sn++ }}</th>
-                                                <td>{{ $subcat->catagory }}</td>
+
+                                                {{-- <td></td> --}}
+                                                {{-- {{ $subcat->catagory }} --}}
+
+
+
+                                                <script>
+                                                    < script src = "https://code.jquery.com/jquery-3.6.0.min.js" >
+                                                </script>
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        $.ajax({
+                                                            url: '/catagory/want/5',
+                                                            method: 'GET',
+                                                            
+                                                            success: function(response) {
+                                                                $('#dataTable tr').append(`<td>${response.catagory}</td> 
+                                                                        <!-- Display more data as needed -->
+                                                                `);
+                                                            },
+                                                            error: function(xhr, status, error) {
+                                                                console.error(error);
+                                                                // Handle errors
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+
+
+
+
                                                 <td>{{ $subcat->subcatagory }}</td>
                                                 <td>{{ $subcat->subcatagory_status }}</td>
                                                 <td>{{ $subcat->created_at }}</td>
                                                 <td>{{ $subcat->updated_at }}</td>
                                                 <td>
-                                                    <a href="{{ url('/admin/subcatagory/update/' . $subcat->id) }}" style="margin-right: 3mm"><i
+                                                    <a href="{{ url('/admin/subcatagory/update/' . $subcat->id) }}"
+                                                        style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
-                                                    <a href="{{ url('admin/subcatagory/delete/' . $subcat->id) }}"><i class="bi bi-trash-fill"></i></a>
+                                                    <a href="{{ url('admin/subcatagory/delete/' . $subcat->id) }}"><i
+                                                            class="bi bi-trash-fill"></i></a>
                                                 </td>
                                             <tr>
                                         @endforeach

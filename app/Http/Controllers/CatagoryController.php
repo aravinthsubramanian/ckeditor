@@ -129,4 +129,11 @@ class CatagoryController extends Controller
         }
         return back()->with("success", "updated Successfully...");
     }
+
+    public function wantcatagory($id){
+        $record = MainCatagory::find($id)->toJson();
+        // $record = $record->toJson();
+        // dd($record);
+        return response($record);
+    }
 }

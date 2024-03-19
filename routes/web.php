@@ -74,6 +74,9 @@ Route::get('admin/catagory/update/{id}', [CatagoryController::class, 'editcatago
 Route::post('admin/catagory/update/{id}', [CatagoryController::class, 'updatecatagory']);
 Route::get('admin/catagory/delete/{id}', [CatagoryController::class, 'delete_catagory']);
 
+Route::get('catagory/want/{id}', [CatagoryController::class, 'wantcatagory']);
+
+
 Route::get('admin/subcatagories', [CatagoryController::class, 'showsubcatagory']);
 Route::get('admin/subcatagory/add', [CatagoryController::class, 'newsubcatagory']);
 Route::post('admin/subcatagory/add', [CatagoryController::class, 'addsubcatagory']);
@@ -91,12 +94,6 @@ Route::get('/admin/products',[ProductController::class, 'showproduct']);
 Route::get('/admin/product/delete/{id}',[ProductController::class, 'deleteproduct']);
 
 Route::get('/admin/product/edit/{id}',[ProductController::class, 'editproduct']);
-
-
-
-
-
-
 
 
 // POST......................................................................................................
