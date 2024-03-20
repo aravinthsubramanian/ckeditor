@@ -130,15 +130,32 @@ class CatagoryController extends Controller
         return back()->with("success", "updated Successfully...");
     }
 
-    public function wantcatagory($id)
+    public function wantcatagory(Request $request)
     {
-        $record = MainCatagory::find($id)->toJson();
+        // dd($request->id);
+        $record = MainCatagory::find($request->id);
         // $record = $record->toJson();
         // dd($record);
-        return response($record);
+        return response()->json([
+            'status' => 'success',
+            'categories' => $record,
+        ]);;
     }
 
-    public function wantsubcatagory(Request $request)
+    public function wantsubcatagory($id)
+    {
+        // dd($request->id);
+        $record = SubCatagory::find($id);
+        $record = $record->catagory;
+        // $record = $record->toJson();
+        // dd($record);
+        return response()->json([
+            'status' => 'success',
+            'subcategories' => $record->toJson(),
+        ]);;
+    }
+
+    public function want_cat_based_subcatagory(Request $request)
     {
         $record = SubCatagory::where([['catagory', $request->id], ['subcatagory_status', 'enable']])->get();
         // $record = $record->toJson();
@@ -148,4 +165,5 @@ class CatagoryController extends Controller
             'subcategories' => $record,
         ]);;
     }
+    
 }

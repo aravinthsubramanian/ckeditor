@@ -28,7 +28,7 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     <!-- JavaScript Libraries -->
-    
+
 </head>
 
 <body>
@@ -188,25 +188,9 @@
                                         <?php $sn = 1; ?>
                                         @foreach ($subcatagory as $subcat)
                                             <tr>
-                                                <th scope="row">{{ $sn++ }}</th>
+                                                <th scope="row">{{ $sn }}</th>
 
-                                                <td>{{ $subcat->catagory }}</td>
-
-                                                {{-- <script>
-                                                    $(document).ready(function() {
-                                                        $(document).on('click', '#colcol', function() {
-                                                            $.ajax({
-                                                                url: "{{ url('/catagory/want/5') }}",
-                                                                type: "get",
-                                                                dataType: 'json',
-                                                                success: function(response) {
-                                                                    console.log(response.catagory);
-                                                                    $("#colcol").text(response.catagory);
-                                                                }
-                                                            });
-                                                        });
-                                                    });
-                                                </script>  --}}
+                                                <td class="getcat{{$sn}}" id="getcat{{$sn}}"></td>
 
                                                 <td>{{ $subcat->subcatagory }}</td>
                                                 <td>{{ $subcat->subcatagory_status }}</td>
@@ -221,9 +205,37 @@
                                                         class="delete-subcategory" data-bs-toggle="modal"
                                                         data-bs-target="#exampleModal" style="margin-right: 3mm"><i
                                                             class="bi bi-trash-fill"></i></a>
-
                                                 </td>
+                                                 <?php $sn++; ?>
                                             <tr>
+
+                                                <script>
+                                                    var i=1;
+                                                    $('#get_cat').ready(function() {
+                                                        let catid = {{$subcat->catagory}};    
+                                                        console.log(catid);
+                                                        let csrf = '{{ csrf_token() }}';
+                                                        $.ajax({
+                                                            method: 'post',
+                                                            url: "{{ route('wantcatagories') }}",
+                                                            data: {
+                                                                _token: csrf,
+                                                                id: catid
+                                                            },
+                                                            success: function(res) {
+                                                                // console.log(res);
+                                                                if (res.status == 'success') {
+                                                                    let all_categories = res.categories;
+                                                                    console.log(all_categories.catagory);
+                                                            
+                                                                    $('.getcat'+i).html(all_categories.catagory);
+                                                                    i++;
+                                                                }
+                                                            }
+                                                        })
+                                                    });
+                                                </script>
+                                                
                                         @endforeach
                                     </tbody>
                                 </table>

@@ -20,9 +20,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -32,6 +29,18 @@
 </head>
 
 <body>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
     <div class="container-xxl position-relative bg-white d-flex p-0">
 
 
@@ -92,8 +101,8 @@
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
-                                style="width: 40px; height: 40px;">
+                            {{-- <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
+                                style="width: 40px; height: 40px;"> --}}
                             <span class="d-none d-lg-inline-flex">{{ Auth::guard('admin')->name }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
@@ -167,10 +176,10 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example"
+                                    <select class="form-control getcat" aria-label="Default select example"
                                         id="catagory_name" name="catagory_name">
-                                        <option value="{{ $subcatagory->catagory }}" selected>{{ $subcatagory->catagory }}</option>
-                                            {{ $subcatagory->catagory }}</option>
+                                        {{-- <option value="{{ $subcatagory->catagory }}" selected>{{ $subcatagory->catagory }}</option>
+                                            {{ $subcatagory->catagory }}</option> --}}
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
                                                 <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
@@ -248,24 +257,35 @@
         </div>
         <!-- Content End -->
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/chart/chart.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+        <script>
+            $('#catagory_name').ready(function() {
+                let catid = {{$subcatagory->catagory}};    
+                console.log(catid);
+                let csrf = '{{ csrf_token() }}';
+                $.ajax({
+                    method: 'post',
+                    url: "{{ route('wantcatagories') }}",
+                    data: {
+                        _token: csrf,
+                        id: catid
+                    },
+                    success: function(res) {
+                        // console.log(res);
+                        if (res.status == 'success') {
+                            let all_categories = res.categories;
+                            console.log(all_categories.catagory);
+                            let htdt ='<option value="'+{{ $subcatagory->catagory }}+'" selected>'+all_categories.catagory+'</option>';
+                            $('.getcat').html(htdt);
+                        }
+                    }
+                })
+            });
+        </script>
+
+
+
+        
         <script>
             $('.select2').select2();
         </script>

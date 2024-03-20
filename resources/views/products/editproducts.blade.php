@@ -20,9 +20,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -104,8 +101,8 @@
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
-                                style="width: 40px; height: 40px;">
+                            {{-- <img class="rounded-circle me-lg-2" src="img/user.jpg" alt=""
+                                style="width: 40px; height: 40px;"> --}}
                             <span class="d-none d-lg-inline-flex">{{ Auth::guard('admin')->name }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
@@ -210,19 +207,30 @@
                                 <div class="mb-3">
                                     <label for="cost" class="form-label">Cost</label>
                                     <input type="text" class="form-control" id="cost" name="cost"
-                                        value="{{ $product->cost }}">
+                                        value="{{ $product->cost }}" onfocusout="myFunction()">
                                     @error('cost')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <script>
+                                    function myFunction() {
+                                        let inputString = parseFloat($("#cost").val());
+                                        if (!isNaN(inputString)) {
+                                            $('#cost').prop("value", inputString.toFixed(2));
+                                        } else {
+                                            inputString = 0.00;
+                                            $('#cost').prop("value", inputString.toFixed(2));
+                                        }
+                                    }
+                                </script>
 
 
                                 <div class="mb-3">
                                     <label for="main_cat_name" class="form-label">Catagory Name</label>
-                                    <select class="form-control select2" aria-label="Default select example"
+                                    <select class="form-control get_category" aria-label="Default select example"
                                         id="catagory_name" name="catagory_name">
-                                        <option value="{{ $product->catagory }}" selected>{{ $product->catagory }}
-                                        </option>
+                                        {{-- <option value="{{ $product->catagory }}" selected>{{ $product->catagory }}
+                                        </option> --}}
                                         @foreach ($catagory as $cata)
                                             @if ($cata->catagory_status == 'enable')
                                                 <option value="{{ $cata->id }}">{{ $cata->catagory }}</option>
@@ -238,8 +246,8 @@
                                     <label for="main_cat_name" class="form-label">Sub Catagory Name</label>
                                     <select class="form-control get_subcategory" aria-label="Default select example"
                                         id="subcatagory_name" name="subcatagory_name">
-                                        <option value="{{ $product->subcatagory }}" selected>
-                                            {{ $product->subcatagory }}</option>
+                                        {{-- <option value="{{ $product->subcatagory }}" selected>
+                                            {{ $product->subcatagory }}</option> --}}
                                     </select>
                                     @error('subcatagory_name')
                                         <p class='text-danger'>{{ $message }}</p>
@@ -250,13 +258,40 @@
                                 <script>
                                     $(document).ready(function() {
 
-                                        $(document).on('change', '#catagory_name', function() {
-                                            let catagory_id = $(this).val();
+                                        $('#catagory_name').ready(function() {
+                                            let catid = $('#catagory_name').val();
                                             let csrf = '{{ csrf_token() }}';
-                                            console.log(catagory_id);
                                             $.ajax({
                                                 method: 'post',
-                                                url: "{{ route('wantsubcatagory') }}",
+                                                url: "{{ route('wantcatagories') }}",
+                                                data: {
+                                                    _token: csrf,
+                                                    id: catid
+                                                },
+                                                success: function(res) {
+                                                    // console.log(res);
+                                                    if (res.status == 'success') {
+                                                        let all_categories = res.categories;
+                                                        let all_options = '';
+                                                        $.each(all_categories, function(index, value) {
+                                                            all_options += "<option value='" + value.id +
+                                                                "' selected>" +
+                                                                value.catagory + "</option>";
+                                                        });
+                                                        $(".get_category").html(all_options);
+                                                    }
+                                                }
+                                            })
+                                        });
+
+                                        $('#subcatagory_name').ready(function() {
+                                            let catagory_id = $('#catagory_name').val();
+                                            let subcatagory_id = $('#subcatagory_name').val();
+                                            let csrf = '{{ csrf_token() }}';
+                                            // console.log(catagory_id);
+                                            $.ajax({
+                                                method: 'post',
+                                                url: "{{ route('want_cat_based_subcatagory') }}",
                                                 data: {
                                                     _token: csrf,
                                                     id: catagory_id
@@ -264,8 +299,16 @@
                                                 success: function(res) {
                                                     console.log(res);
                                                     if (res.status == 'success') {
-                                                        let all_options = "<option value=''></option>";
                                                         let all_subcategories = res.subcategories;
+                                                        let all_options = '';
+                                                        $.each(all_subcategories, function(index, value) {
+                                                            if (subcatagory_id == value.id) {
+                                                                all_options += "<option value='" + value.id +
+                                                                    "' selected>" +
+                                                                    value.subcatagory + "</option>";
+                                                            }
+                                                        });
+
                                                         $.each(all_subcategories, function(index, value) {
                                                             all_options += "<option value='" + value.id + "'>" +
                                                                 value.subcatagory + "</option>";
@@ -276,14 +319,13 @@
                                             })
                                         });
 
-                                        $('#subcatagory_name').ready(function() {
-                                            let catagory_id = $('#catagory_name').val();
-                                            let subcatagory_id = $('#subcatagory_name').val();
+                                        $(document).on('change', '#catagory_name', function() {
+                                            let catagory_id = $(this).val();
                                             let csrf = '{{ csrf_token() }}';
                                             console.log(catagory_id);
                                             $.ajax({
                                                 method: 'post',
-                                                url: "{{ route('wantsubcatagory') }}",
+                                                url: "{{ route('want_cat_based_subcatagory') }}",
                                                 data: {
                                                     _token: csrf,
                                                     id: catagory_id
@@ -291,8 +333,7 @@
                                                 success: function(res) {
                                                     console.log(res);
                                                     if (res.status == 'success') {
-                                                        let all_options = "<option value='" + subcatagory_id + "'>" +
-                                                            subcatagory_id + "</option>";
+                                                        let all_options = "<option value=''></option>";
                                                         let all_subcategories = res.subcategories;
                                                         $.each(all_subcategories, function(index, value) {
                                                             all_options += "<option value='" + value.id + "'>" +
@@ -407,20 +448,11 @@
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/chart/chart.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/tempusdominus/js/moment.min.js"></script>
-        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-        
+
         <script type="text/javascript">
             var i = 0;
             $("#dynamic-ar").click(function() {
@@ -429,7 +461,7 @@
                     '][specification]" class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-field">Delete</button></td></tr>'
                 );
             });
-            
+
             $(document).on('click', '.remove-input-field', function() {
                 $(this).parents('tr').remove();
             });

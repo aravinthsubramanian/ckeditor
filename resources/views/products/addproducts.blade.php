@@ -185,33 +185,27 @@
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description"
-                                        value="{{ old('description') }}"></textarea>
+                                    <textarea class="form-control" id="description" name="description" value="{{ old('description') }}">{{ old('description') }}</textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
 
-                                <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
+                                <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
                                 <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
                                 <script>
                                     ClassicEditor
-                                        .create( document.querySelector( '#description' ) )
-                                        .catch( error => {
-                                            console.error( error );
-                                        } );
+                                        .create(document.querySelector('#description'))
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
                                 </script>
                                 <script type="text/javascript">
                                     CKEDITOR.replace('wysiwyg-editor', {
-                                        filebrowserUploadUrl: "{{route('ckeditor.image-upload', ['_token' => csrf_token() ])}}",
+                                        filebrowserUploadUrl: "{{ route('ckeditor.image-upload', ['_token' => csrf_token()]) }}",
                                         filebrowserUploadMethod: 'form'
                                     });
                                 </script>
-                                
-
-                                
-                                
-
 
 
                                 <div class="mb-3">
@@ -264,17 +258,17 @@
                                 </div>
 
                                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>                            
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
                                 <script>
                                     $(document).ready(function() {
-                                        
+
                                         $(document).on('change', '#catagory_name', function() {
                                             let catagory_id = $(this).val();
                                             let csrf = '{{ csrf_token() }}';
                                             console.log(catagory_id);
                                             $.ajax({
                                                 method: 'post',
-                                                url: "{{ route('wantsubcatagory') }}",
+                                                url: "{{ route('want_cat_based_subcatagory') }}",
                                                 data: {
                                                     _token: csrf,
                                                     id: catagory_id
@@ -295,6 +289,23 @@
                                         });
                                     });
                                 </script>
+
+                                <div class="mb-3">
+                                    <label for="product_status" class="form-label">Product Status</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="enable">
+                                            <label class="form-check-label" for="enable">Enabled</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="product_status"
+                                                id="product_status" value="dissable">
+                                            <label class="form-check-label" for="disable">Dissabled</label>
+                                        </div>
+                                        @error('product_status')
+                                            <p class='text-danger'>{{ $message }}</p>
+                                        @enderror
+                                </div>
 
                                 <table class="table table-borderless" id="dynamicAddRemove">
                                     <tr>
@@ -332,7 +343,7 @@
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -456,7 +467,6 @@
         </style>
 
         <script>
-
             var imgUpload = document.getElementById('upload-img'),
                 imgPreview = document.getElementById('img-preview'),
                 imgUploadForm = document.getElementById('form-upload'),

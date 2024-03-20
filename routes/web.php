@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatagoryController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PaginationController;
 
 //GET Routes for View Blade Pages...............................................................
 Route::get('/', function () {
@@ -84,10 +85,10 @@ Route::post('admin/catagory/update/{id}', [CatagoryController::class, 'updatecat
 
 Route::get('admin/catagory/delete/{id}', [CatagoryController::class, 'delete_catagory']);
 
-Route::post('catagory/want/', [CatagoryController::class, 'wantcatagory'])->name('wantcatagory');
+Route::post('catagory/want/', [CatagoryController::class, 'wantcatagory'])->name('wantcatagories');
 
 
-
+Route::post('catagory/want/both', [CatagoryController::class, 'wantbothcatagories'])->name('wantbothcatagories');
 
 // Subcatogory Routes............................................................................................................
 
@@ -101,7 +102,9 @@ Route::post('admin/subcatagory/update/{id}', [CatagoryController::class, 'update
 
 Route::get('admin/subcatagory/delete/{id}', [CatagoryController::class, 'delete_subcatagory']);
 
-Route::post('subcatagory/want', [CatagoryController::class, 'wantsubcatagory'])->name('wantsubcatagory');
+Route::post('subcatagory/want/', [CatagoryController::class, 'wantsubcatagory'])->name('wantsubcatagory');
+
+Route::post('catbasedsubcatagory/want', [CatagoryController::class, 'want_cat_based_subcatagory'])->name('want_cat_based_subcatagory');
 
 
 
@@ -124,3 +127,12 @@ Route::get('/admin/product/delete/{id}', [ProductController::class, 'deleteprodu
 // ckeditor......................................................................................................
 
 Route::post('ckeditor/upload', 'CKEditorController@upload')->name('ckeditor.image-upload');
+
+
+// pagination.....................................................................................................
+
+// Route::get('/takeproduct', [ProductController::class, 'index'])->name('home');
+
+Route::post('takeproduct/', [PaginationController::class, 'takeproduct'])->name('products.getProducts');
+
+Route::post('changeproductstatus/', [PaginationController::class, 'changeprostatus'])->name('changeprostatus');

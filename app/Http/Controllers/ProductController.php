@@ -34,6 +34,7 @@ class ProductController extends Controller
             'images.*' => 'mimes:jpg,png,jpeg,gif,svg',
             'cost' => 'required|numeric|regex:/^\d*\.\d{1}[0-9]?$/',
             'product' => 'required',
+            'product_status' => 'required',
             'description' => 'required',
             'catagory_name' => 'required',
             'subcatagory_name' => 'required',
@@ -49,7 +50,7 @@ class ProductController extends Controller
         $product->product = $request->product;
         $product->description = $request->description;
         $product->cost = $request->cost;
-        $product->status = 'enable';
+        $product->status = $request->product_status;
         $product->catagory = $request->catagory_name;
         $product->subcatagory = $request->subcatagory_name;
         $product->save();

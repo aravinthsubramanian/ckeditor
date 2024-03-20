@@ -25,14 +25,30 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
+
+
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
 
-     <!-- JavaScript Libraries -->
-     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- JavaScript Libraries -->
+    {{-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
+
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
 
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -170,15 +186,15 @@
                             <br>
 
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" id="datatable">
                                     <thead>
                                         <tr>
                                             <th scope="col">S.No</th>
-                                            <th scope="col">Images</th>
+                                            {{-- <th scope="col">Images</th> --}}
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Cost</th>
-                                            <th scope="col">Specifications</th>
+                                            {{-- <th scope="col">Specifications</th> --}}
                                             <th scope="col">Status</th>
                                             <th scope="col">Catagory</th>
                                             <th scope="col">Sub catagory</th>
@@ -187,12 +203,12 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         <?php $sn = 1; ?>
-                                        @foreach ($products as $product)
-                                            <tr>
-                                                <th scope="row">{{ $sn++ }}</th>
-                                                <td>
+                                    @foreach ($products as $product) --}}
+                                    {{-- <tr> --}}
+                                    {{-- <th scope="row">{{ $sn++ }}</th> --}}
+                                    {{-- <td>
                                                     @foreach ($product_image as $image)
                                                         @if ($product->unique_id == $image->unique_id)
                                                             <img src="{{ asset('/storage/' . $image->path) }}"
@@ -206,16 +222,16 @@
                                                 <td>
                                                     @foreach ($product_spec as $spec)
                                                         @if ($product->unique_id == $spec->unique_id)
-                                                            {{$spec->specification}}
+                                                            {{ $spec->specification }}
                                                         @endif
                                                     @endforeach
                                                 </td>
                                                 <td>{{ $product->status }}</td>
                                                 <td>{{ $product->catagory }}</td>
-                                                <td>{{ $product->subcatagory }}</td>
-                                                {{-- <td>{{ $product->created_at }}</td>
+                                                <td>{{ $product->subcatagory }}</td>  --}}
+                                    {{-- <td>{{ $product->created_at }}</td>
                                                 <td>{{ $product->updated_at }}</td> --}}
-                                                <td>
+                                    {{-- <td>
                                                     <a href="{{ url('/admin/product/edit/' . $product->id) }}"
                                                         style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
@@ -225,17 +241,110 @@
                                                         data-bs-target="#exampleModal" style="margin-right: 3mm"><i
                                                             class="bi bi-trash-fill"></i></a>
                                                 </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
+                                            </tr> --}}
+                                    {{-- @endforeach 
+                                    </tbody> --}}
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
             {{-- table end --}}
+
+
+
+            <script>
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $(document).ready(function() {
+                    let i = 1;
+                    $('#datatable').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "{{ route('products.getProducts') }}",
+                            type: "POST",
+                            data: function(data) {
+                                data.search = $('input[type="search"]').val();
+                            }
+                        },
+                        order: ['1', 'DESC'],
+                        pageLength: 5,
+                        searching: true,
+
+                        aoColumns: [{
+                                data: null,
+                                orderable: false,
+                                searchable: false,
+                                render: function(data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            {
+                                data: 'product',
+                            },
+                            {
+                                data: 'description',
+                            },
+                            {
+                                data: 'cost',
+                            },
+                            // {
+                            //     data: 'specifications'
+                            // },
+                            {
+                                data: 'status',
+                            },
+                            {
+                                data: 'catagory',
+                            },
+                            {
+                                data: 'subcatagory',
+                            },
+                            {
+                                data: 'id',
+                                orderable: false,
+                                searchable: false,
+                                render: function(data, type, row) {
+                                    return '<button class="btn btn-primary" onclick="tochange(' + row.id +
+                                        ')">change</button>';
+                                }
+                            },
+                        ]
+                    });
+                });
+
+                function tochange(id) {
+                    // Handle edit action here, e.g., open a modal or redirect to edit page
+                    console.log('Edit row with ID: ' + id);
+                    let csrf = '{{ csrf_token() }}';
+                    
+                    $.ajax({
+                        method: 'post',
+                        url: "{{ route('changeprostatus') }}",
+                        data: {
+                            _token: csrf,
+                            id: id
+                        },
+                        success: function(res) {
+                            // console.log(res);
+                            if (res.status == 'success') {
+                            }
+                        }
+                    })
+                }
+
+
+            </script>
+
+
+
+
+
 
 
 
