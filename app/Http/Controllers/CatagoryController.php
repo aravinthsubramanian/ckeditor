@@ -133,14 +133,24 @@ class CatagoryController extends Controller
     public function wantcatagory(Request $request)
     {
         // dd($request->id);
-        $record = MainCatagory::find($request->id);
-        // $record = $record->toJson();
-        // dd($record);
+        $record = MainCatagory::where('catagory_status', 'enable')->get();
         return response()->json([
             'status' => 'success',
             'categories' => $record,
         ]);;
     }
+
+    public function catitoa(Request $request){
+        $record = MainCatagory::find($request->id);
+        // $record = $record->toJson();
+        // dd($record);
+        // $record = $record->toJson();
+        return response()->json([
+            'status' => 'success',
+            'categories' => $record,
+        ]);;
+    }
+
 
     public function wantsubcatagory($id)
     {

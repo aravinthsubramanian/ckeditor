@@ -217,7 +217,7 @@
                                                         let csrf = '{{ csrf_token() }}';
                                                         $.ajax({
                                                             method: 'post',
-                                                            url: "{{ route('wantcatagories') }}",
+                                                            url: "{{ route('catitoa') }}",
                                                             data: {
                                                                 _token: csrf,
                                                                 id: catid

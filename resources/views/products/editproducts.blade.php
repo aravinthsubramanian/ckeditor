@@ -29,9 +29,23 @@
 
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link type="text/css" rel="stylesheet" href="http://example.com/image-uploader.min.css">
+
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link type="text/css" rel="stylesheet" href="http://example.com/image-uploader.min.css">
     <script type="text/javascript" src="http://example.com/jquery.min.js"></script>
     <script type="text/javascript" src="http://example.com/image-uploader.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!--Material Design Iconic Font-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Image Uploader CSS -->
+    <link rel="stylesheet" href="dist/image-uploader.min.css">
+
+    <!-- Image Uploader Js -->
+    <script type="text/javascript" src="dist/image-uploader.min.js"></script>
 </head>
 
 <body>
@@ -39,6 +53,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
 
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -259,7 +282,7 @@
                                     $(document).ready(function() {
 
                                         $('#catagory_name').ready(function() {
-                                            let catid = $('#catagory_name').val();
+                                            let catid = {{ $product->catagory }};
                                             let csrf = '{{ csrf_token() }}';
                                             $.ajax({
                                                 method: 'post',
@@ -274,10 +297,14 @@
                                                         let all_categories = res.categories;
                                                         let all_options = '';
                                                         $.each(all_categories, function(index, value) {
-                                                            all_options += "<option value='" + value.id +
-                                                                "' selected>" +
-                                                                value.catagory + "</option>";
-                                                        });
+                                                            if (catid == value.id) {
+                                                                all_options += '<option value="' + value.id +
+                                                                    '" selected>' + value.catagory + '</option>';
+                                                            } else {
+                                                                all_options += '<option value="' + value.id +
+                                                                    '">' + value.catagory + '</option>';
+                                                            }
+                                                        })
                                                         $(".get_category").html(all_options);
                                                     }
                                                 }
@@ -285,8 +312,8 @@
                                         });
 
                                         $('#subcatagory_name').ready(function() {
-                                            let catagory_id = $('#catagory_name').val();
-                                            let subcatagory_id = $('#subcatagory_name').val();
+                                            let catagory_id = {{ $product->catagory }};
+                                            let subcatagory_id = {{ $product->subcatagory }};
                                             let csrf = '{{ csrf_token() }}';
                                             // console.log(catagory_id);
                                             $.ajax({
@@ -306,12 +333,10 @@
                                                                 all_options += "<option value='" + value.id +
                                                                     "' selected>" +
                                                                     value.subcatagory + "</option>";
+                                                            } else {
+                                                                all_options += "<option value='" + value.id + "'>" +
+                                                                    value.subcatagory + "</option>";
                                                             }
-                                                        });
-
-                                                        $.each(all_subcategories, function(index, value) {
-                                                            all_options += "<option value='" + value.id + "'>" +
-                                                                value.subcatagory + "</option>";
                                                         });
                                                         $(".get_subcategory").html(all_options);
                                                     }
@@ -382,41 +407,57 @@
                                     @endif
                                 </div>
 
-
-
                                 <table class="table table-borderless" id="dynamicAddRemove">
                                     <tr>
                                         <label for="Specifications" class="form-label">Specifications</label>
                                     </tr>
-                                    <tr>
-                                        <td><input type="text" name="addMoreInputFields[0][specification]"
-                                                class="form-control" />
-                                        </td>
-                                        <td><button type="button" name="add" id="dynamic-ar"
-                                                class="btn btn-outline-primary">+ Add
-                                            </button></td>
-                                    </tr>
+                                    <?php $i = 0; ?>
+                                    @foreach ($product_spec as $spec)
+                                        @if ($i == 0)
+                                            <tr>
+                                                <td><input type="text"
+                                                        name="addMoreInputFields[{{ $i }}][specification]"
+                                                        class="form-control" value="{{ $spec->specification }}" />
+                                                </td>
+                                                <td><button type="button" name="add" id="dynamic-ar"
+                                                        class="btn btn-outline-primary">+ Add
+                                                    </button></td>
+                                            </tr>
+                                        @endif
+                                        @if ($i != 0)
+                                            <tr>
+                                                <td><input type="text"
+                                                        name="addMoreInputFields[{{ $i }}][specification]"
+                                                        class="form-control" value="{{ $spec->specification }}" />
+                                                </td>
+                                                <td><button type="button"
+                                                        class="btn btn-outline-danger remove-input-field">Delete</button>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        <?php $i++; ?>
+                                    @endforeach
                                 </table>
                                 @error('addMoreInputFields.*.specification')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
 
+
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Images</label>
-                                    <input type="file" class="form-control" name="images[]" id="upload-img"
-                                        placeholder="Choose images" multiple>
-                                    @error('images')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                    <input type="file" name="images[]" id="images" multiple
+                                        class="form-control" required>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="preview" class="form-label">Preview</label>
                                     </div>
                                     <div class="mt-1 text-center">
-                                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"> </div>
+                                        <div id="image_preview" style="width:50%;"></div>
                                     </div>
                                 </div>
+                                <br>
+
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
 
@@ -445,14 +486,6 @@
         </div>
         <!-- Content End -->
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-
         <script type="text/javascript">
             var i = 0;
             $("#dynamic-ar").click(function() {
@@ -467,9 +500,49 @@
             });
         </script>
 
-
         <style>
-            .images-preview-div img {
+            .img-div {
+                position: relative;
+                width: 30%;
+                /* float: left; */
+                display: inline-block;
+                margin: 1rem 0;
+                justify-content: space-around;
+                margin-right: 5px;
+                margin-left: 5px;
+                margin-bottom: 5px;
+                margin-top: 5px;
+            }
+
+            .image {
+                opacity: 1;
+                display: block;
+                width: 100%;
+                max-width: auto;
+                transition: .5s ease;
+                backface-visibility: hidden;
+            }
+
+            .middle {
+                transition: .5s ease;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+            .img-div:hover .image {
+                opacity: 0.3;
+            }
+
+            .img-div:hover .middle {
+                opacity: 1;
+            }
+
+            /* .images-preview-div img {
                 padding: 10px;
                 max-width: 100px;
             }
@@ -522,7 +595,7 @@
             .remove-btn:hover {
                 box-shadow: 0px 0px 3px grey;
                 transition: all .3s ease-in-out;
-            }
+            } */
 
             /* Chrome, Safari, Edge, Opera */
             input::-webkit-outer-spin-button,
@@ -538,40 +611,54 @@
         </style>
 
         <script>
-            var imgUpload = document.getElementById('upload-img'),
-                imgPreview = document.getElementById('img-preview'),
-                imgUploadForm = document.getElementById('form-upload'),
-                totalFiles, previewTitle, previewTitleText, img;
+            $(document).ready(function() {
+                var fileArr = [];
+                $("#images").change(function() {
+                    // check if fileArr length is greater than 0
+                    if (fileArr.length > 0) fileArr = [];
+                    $('#image_preview').html("");
+                    var total_file = document.getElementById("images").files;
+                    if (!total_file.length) return;
+                    for (var i = 0; i < total_file.length; i++) {
+                        if (total_file[i].size > 1048576) {
+                            return false;
+                        } else {
+                            fileArr.push(total_file[i]);
+                            $('#image_preview').append(
+                                "<div class='img-div' id='img-div" + i + "'>"+
+                                    "<img src='" +URL.createObjectURL(event.target.files[i]) +"' class='img-responsive image img-thumbnail' title='" + total_file[i].name + "'>"
+                                    +"<div class='middle'>"+
+                                        "<button id='action-icon' value='img-div"+i+"' class='btn btn-danger' role='"+total_file[i].name+"'>"
+                                            +"<i class='fa fa-trash'></i>"
+                                        +"</button>"
+                                    +"</div>"
+                                +"</div>"
+                            );
+                        }
+                    }
+                });
 
-            imgUpload.addEventListener('change', previewImgs, true);
-
-            function previewImgs(event) {
-                totalFiles = imgUpload.files.length;
-
-                if (!!totalFiles) {
-                    imgPreview.classList.remove('img-thumbs-hidden');
+                $('body').on('click', '#action-icon', function(evt) {
+                    var divName = this.value;
+                    var fileName = $(this).attr('role');
+                    $(`#${divName}`).remove();
+                    for (var i = 0; i < fileArr.length; i++) {
+                        if (fileArr[i].name === fileName) {
+                            fileArr.splice(i, 1);
+                        }
+                    }
+                    document.getElementById('images').files = FileListItem(fileArr);
+                    evt.preventDefault();
+                });
+                function FileListItem(file) {
+                    file = [].slice.call(Array.isArray(file) ? file : arguments)
+                    for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+                    if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+                    for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+                    return b.files
                 }
+            });
 
-                for (var i = 0; i < totalFiles; i++) {
-                    wrapper = document.createElement('div');
-                    wrapper.classList.add('wrapper-thumb');
-                    removeBtn = document.createElement("span");
-                    nodeRemove = document.createTextNode('x');
-                    removeBtn.classList.add('remove-btn');
-                    removeBtn.appendChild(nodeRemove);
-                    img = document.createElement('img');
-                    img.src = URL.createObjectURL(event.target.files[i]);
-                    img.classList.add('img-preview-thumb');
-                    wrapper.appendChild(img);
-                    wrapper.appendChild(removeBtn);
-                    imgPreview.appendChild(wrapper);
-
-                    $('.remove-btn').click(function() {
-                        $(this).parent('.wrapper-thumb').remove();
-                    });
-
-                }
-            }
         </script>
 
 </body>

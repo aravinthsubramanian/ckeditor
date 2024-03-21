@@ -190,11 +190,11 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">S.No</th>
-                                            {{-- <th scope="col">Images</th> --}}
+                                            <th scope="col">Images</th>
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Cost</th>
-                                            {{-- <th scope="col">Specifications</th> --}}
+                                            <th scope="col">Specifications</th>
                                             <th scope="col">Status</th>
                                             <th scope="col">Catagory</th>
                                             <th scope="col">Sub catagory</th>
@@ -203,12 +203,12 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
+                                    <tbody>
                                         <?php $sn = 1; ?>
-                                    @foreach ($products as $product) --}}
-                                    {{-- <tr> --}}
-                                    {{-- <th scope="row">{{ $sn++ }}</th> --}}
-                                    {{-- <td>
+                                    @foreach ($products as $product)
+                                    <tr>
+                                    <th scope="row">{{ $sn++ }}</th>
+                                     <td>
                                                     @foreach ($product_image as $image)
                                                         @if ($product->unique_id == $image->unique_id)
                                                             <img src="{{ asset('/storage/' . $image->path) }}"
@@ -228,10 +228,10 @@
                                                 </td>
                                                 <td>{{ $product->status }}</td>
                                                 <td>{{ $product->catagory }}</td>
-                                                <td>{{ $product->subcatagory }}</td>  --}}
+                                                <td>{{ $product->subcatagory }}</td> 
                                     {{-- <td>{{ $product->created_at }}</td>
                                                 <td>{{ $product->updated_at }}</td> --}}
-                                    {{-- <td>
+                                    <td>
                                                     <a href="{{ url('/admin/product/edit/' . $product->id) }}"
                                                         style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
@@ -241,9 +241,9 @@
                                                         data-bs-target="#exampleModal" style="margin-right: 3mm"><i
                                                             class="bi bi-trash-fill"></i></a>
                                                 </td>
-                                            </tr> --}}
-                                    {{-- @endforeach 
-                                    </tbody> --}}
+                                            </tr>
+                                    @endforeach 
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -254,7 +254,7 @@
 
 
 
-            <script>
+            {{-- <script>
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -284,6 +284,13 @@
                                     return meta.row + meta.settings._iDisplayStart + 1;
                                 }
                             },
+                            // {
+                            //     "img_data": "image_url",
+                            //     "render": function(data) {
+                            //         let htdt = "<img src=""{{ asset('/storage/"+data+"')}}" width="40px">";
+                            //         return htdt;
+                            //     }
+                            // }, 
                             {
                                 data: 'product',
                             },
@@ -322,7 +329,7 @@
                     // Handle edit action here, e.g., open a modal or redirect to edit page
                     console.log('Edit row with ID: ' + id);
                     let csrf = '{{ csrf_token() }}';
-                    
+
                     $.ajax({
                         method: 'post',
                         url: "{{ route('changeprostatus') }}",
@@ -332,20 +339,11 @@
                         },
                         success: function(res) {
                             // console.log(res);
-                            if (res.status == 'success') {
-                            }
+                            if (res.status == 'success') {}
                         }
                     })
                 }
-
-
-            </script>
-
-
-
-
-
-
+            </script> --}}
 
 
             <!-- Modal -->

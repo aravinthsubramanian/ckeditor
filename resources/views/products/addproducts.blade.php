@@ -35,6 +35,21 @@
     <script type="text/javascript" src="http://example.com/jquery.min.js"></script>
     <script type="text/javascript" src="http://example.com/image-uploader.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    {{-- <!--   Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
 </head>
 
 <body>
@@ -292,19 +307,19 @@
 
                                 <div class="mb-3">
                                     <label for="product_status" class="form-label">Product Status</label><br>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="product_status"
-                                                id="product_status" value="enable">
-                                            <label class="form-check-label" for="enable">Enabled</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="product_status"
-                                                id="product_status" value="dissable">
-                                            <label class="form-check-label" for="disable">Dissabled</label>
-                                        </div>
-                                        @error('product_status')
-                                            <p class='text-danger'>{{ $message }}</p>
-                                        @enderror
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="product_status"
+                                            id="product_status" value="enable">
+                                        <label class="form-check-label" for="enable">Enabled</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="product_status"
+                                            id="product_status" value="dissable">
+                                        <label class="form-check-label" for="disable">Dissabled</label>
+                                    </div>
+                                    @error('product_status')
+                                        <p class='text-danger'>{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <table class="table table-borderless" id="dynamicAddRemove">
@@ -326,20 +341,18 @@
 
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Images</label>
-                                    <input type="file" class="form-control" name="images[]" id="upload-img"
-                                        placeholder="Choose images" multiple>
-                                    @error('images')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                    <input type="file" name="images[]" id="images" multiple
+                                        class="form-control" required>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="preview" class="form-label">Preview</label>
                                     </div>
                                     <div class="mt-1 text-center">
-                                        <div class="img-thumbs img-thumbs-hidden" id="img-preview"> </div>
+                                        <div id="image_preview" style="width:50%;"></div>
                                     </div>
                                 </div>
+                                <br>
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
@@ -403,54 +416,45 @@
         </script>
 
         <style>
-            .img-thumbs {
-                background: #eee;
-                border: 1px solid #ccc;
-                border-radius: 0.25rem;
-                margin: 1.5rem 0;
-                padding: 0.75rem;
-            }
-
-            .img-thumbs-hidden {
-                display: none;
-            }
-
-            .wrapper-thumb {
+            .img-div {
                 position: relative;
+                width: 30%;
+                /* float: left; */
                 display: inline-block;
                 margin: 1rem 0;
                 justify-content: space-around;
+                margin-right: 5px;
+                margin-left: 5px;
+                margin-bottom: 5px;
+                margin-top: 5px;
             }
 
-            .img-preview-thumb {
-                background: #fff;
-                border: 1px solid none;
-                border-radius: 0.25rem;
-                box-shadow: 0.125rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.12);
-                margin-right: 1rem;
-                max-width: 140px;
-                padding: 0.25rem;
+            .image {
+                opacity: 1;
+                display: block;
+                width: 100%;
+                max-width: auto;
+                transition: .5s ease;
+                backface-visibility: hidden;
             }
 
-            .remove-btn {
+            .middle {
+                transition: .5s ease;
+                opacity: 0;
                 position: absolute;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: .7rem;
-                top: -5px;
-                right: 10px;
-                width: 20px;
-                height: 20px;
-                background: white;
-                border-radius: 10px;
-                font-weight: bold;
-                cursor: pointer;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                text-align: center;
             }
 
-            .remove-btn:hover {
-                box-shadow: 0px 0px 3px grey;
-                transition: all .3s ease-in-out;
+            .img-div:hover .image {
+                opacity: 0.3;
+            }
+
+            .img-div:hover .middle {
+                opacity: 1;
             }
 
             /* Chrome, Safari, Edge, Opera */
@@ -467,40 +471,57 @@
         </style>
 
         <script>
-            var imgUpload = document.getElementById('upload-img'),
-                imgPreview = document.getElementById('img-preview'),
-                imgUploadForm = document.getElementById('form-upload'),
-                totalFiles, previewTitle, previewTitleText, img;
 
-            imgUpload.addEventListener('change', previewImgs, true);
+            $(document).ready(function() {
+                var fileArr = [];
+                $("#images").change(function() {
+                    // check if fileArr length is greater than 0
+                    if (fileArr.length > 0) fileArr = [];
 
-            function previewImgs(event) {
-                totalFiles = imgUpload.files.length;
+                    $('#image_preview').html("");
+                    var total_file = document.getElementById("images").files;
+                    if (!total_file.length) return;
+                    for (var i = 0; i < total_file.length; i++) {
+                        if (total_file[i].size > 1048576) {
+                            return false;
+                        } else {
+                            fileArr.push(total_file[i]);
+                            $('#image_preview').append(
+                                "<div class='img-div' id='img-div" + i + "'>"+
+                                    "<img src='" +URL.createObjectURL(event.target.files[i]) +"' class='img-responsive image img-thumbnail' title='" + total_file[i].name + "'>"
+                                    +"<div class='middle'>"+
+                                        "<button id='action-icon' value='img-div"+i+"' class='btn btn-danger' role='"+total_file[i].name+"'>"
+                                            +"<i class='fa fa-trash'></i>"
+                                        +"</button>"
+                                    +"</div>"
+                                +"</div>"
+                            );
+                        }
+                    }
+                });
 
-                if (!!totalFiles) {
-                    imgPreview.classList.remove('img-thumbs-hidden');
+                $('body').on('click', '#action-icon', function(evt) {
+                    var divName = this.value;
+                    var fileName = $(this).attr('role');
+                    $(`#${divName}`).remove();
+
+                    for (var i = 0; i < fileArr.length; i++) {
+                        if (fileArr[i].name === fileName) {
+                            fileArr.splice(i, 1);
+                        }
+                    }
+                    document.getElementById('images').files = FileListItem(fileArr);
+                    evt.preventDefault();
+                });
+
+                function FileListItem(file) {
+                    file = [].slice.call(Array.isArray(file) ? file : arguments)
+                    for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+                    if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+                    for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+                    return b.files
                 }
-
-                for (var i = 0; i < totalFiles; i++) {
-                    wrapper = document.createElement('div');
-                    wrapper.classList.add('wrapper-thumb');
-                    removeBtn = document.createElement("span");
-                    nodeRemove = document.createTextNode('x');
-                    removeBtn.classList.add('remove-btn');
-                    removeBtn.appendChild(nodeRemove);
-                    img = document.createElement('img');
-                    img.src = URL.createObjectURL(event.target.files[i]);
-                    img.classList.add('img-preview-thumb');
-                    wrapper.appendChild(img);
-                    wrapper.appendChild(removeBtn);
-                    imgPreview.appendChild(wrapper);
-
-                    $('.remove-btn').click(function() {
-                        $(this).parent('.wrapper-thumb').remove();
-                    });
-
-                }
-            }
+            });
         </script>
 </body>
 

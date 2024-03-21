@@ -87,8 +87,7 @@ Route::get('admin/catagory/delete/{id}', [CatagoryController::class, 'delete_cat
 
 Route::post('catagory/want/', [CatagoryController::class, 'wantcatagory'])->name('wantcatagories');
 
-
-Route::post('catagory/want/both', [CatagoryController::class, 'wantbothcatagories'])->name('wantbothcatagories');
+Route::post('catagory/name/', [CatagoryController::class, 'catitoa'])->name('catitoa');
 
 // Subcatogory Routes............................................................................................................
 

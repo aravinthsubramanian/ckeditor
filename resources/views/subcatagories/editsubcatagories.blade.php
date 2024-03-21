@@ -260,7 +260,7 @@
 
         <script>
             $('#catagory_name').ready(function() {
-                let catid = {{$subcatagory->catagory}};    
+                let catid = {{ $subcatagory->catagory }};
                 console.log(catid);
                 let csrf = '{{ csrf_token() }}';
                 $.ajax({
@@ -275,8 +275,19 @@
                         if (res.status == 'success') {
                             let all_categories = res.categories;
                             console.log(all_categories.catagory);
-                            let htdt ='<option value="'+{{ $subcatagory->catagory }}+'" selected>'+all_categories.catagory+'</option>';
-                            $('.getcat').html(htdt);
+
+                            let all_options='';
+                            $.each(all_categories, function(index, value) {
+                                
+                                if (catid == value.id) {
+                                    all_options += '<option value="' + {{ $subcatagory->catagory }} +
+                                        '" selected>' + value.catagory + '</option>';
+                                } else {
+                                    all_options += '<option value="' + value.id +
+                                        '">' + value.catagory + '</option>';
+                                }
+                            })
+                            $('.getcat').html(all_options);
                         }
                     }
                 })
@@ -285,7 +296,7 @@
 
 
 
-        
+
         <script>
             $('.select2').select2();
         </script>
