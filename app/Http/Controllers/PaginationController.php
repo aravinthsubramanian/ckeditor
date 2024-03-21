@@ -55,9 +55,10 @@ class PaginationController extends Controller
         }
         $query = $query->orderBy($orderByName, $orderBy);
         $recordsFiltered = $recordsTotal = $query->count();
-        $users = $query->skip($skip)->take($pageLength)->get();
+        $products = $query->skip($skip)->take($pageLength)->get();
 
-        return response()->json(["draw" => $request->draw, "recordsTotal" => $recordsTotal, "recordsFiltered" => $recordsFiltered, 'data' => $users], 200);
+
+        return response()->json(["draw" => $request->draw, "recordsTotal" => $recordsTotal, "recordsFiltered" => $recordsFiltered, 'data' => $products], 200);
     }
 
 
@@ -72,13 +73,23 @@ class PaginationController extends Controller
         $product->cost = $product->cost;
         if($product->status == 'enable'){
             $product->status = 'disable';
+            $flag='disable';
         }else{
             $product->status = 'enable';
+            $flag='enable';
         }
         $product->catagory = $product->catagory;
         $product->subcatagory = $product->subcatagory;
         $product->update();
 
-        return view('products.products')->with("success", "Updated Successfully...");
+        if($flag == 'enable'){
+            return response()->json(["success"=>"Enabled Successfully..."]);
+        }else{
+            return response()->json(["success"=>"Disabled Successfully..."]);
+        }
+    }
+
+    public function getspecforid(){
+
     }
 }

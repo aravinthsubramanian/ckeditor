@@ -151,6 +151,17 @@ class CatagoryController extends Controller
         ]);;
     }
 
+    public function subcatitoa(Request $request){
+        $record = SubCatagory::find($request->id);
+        // $record = $record->toJson();
+        // dd($record);
+        // $record = $record->toJson();
+        return response()->json([
+            'status' => 'success',
+            'subcategories' => $record,
+        ]);;
+    }
+
 
     public function wantsubcatagory($id)
     {

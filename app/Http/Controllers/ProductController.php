@@ -58,8 +58,8 @@ class ProductController extends Controller
         if ($request->hasfile('images')) {
             foreach ($request->file('images') as $key => $file) {
                 $insert[$key]['title'] = $file->getClientOriginalName();
-                $insert[$key]['path'] = $file->store('images');
-                $insert[$key]['unique_id'] = $unique_id;
+                $insert[$key]['path'] = $file->storeAs('images', $file->getClientOriginalName());
+                $insert[$key]['unique_id'] = $product->id;
             }
         }
         Product_image::insert($insert);
@@ -67,7 +67,7 @@ class ProductController extends Controller
         foreach ($request->addMoreInputFields as $key => $value) {
             foreach ($value as $k => $v) {
                 $upload[$key]['specification'] = $v;
-                $upload[$key]['unique_id'] = $unique_id;
+                $upload[$key]['unique_id'] = $product->id;
             }
         }
         Product_spec::insert($upload);

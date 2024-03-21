@@ -33,6 +33,31 @@
 
 <body>
 
+
+    <style>
+        #snackbar {
+            visibility: hidden;
+            min-width: 300px;
+            margin-left: -125px;
+            background-color: #ece916;
+            color: black;
+            text-align: center;
+            border-radius: 2px;
+            padding: 20px;
+            position: fixed;
+            z-index: 1;
+            left: 80%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        #snackbar.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+    </style>
+
     <!-- JavaScript Libraries -->
     {{-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -49,7 +74,6 @@
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
-
 
     <div class="container-xxl position-relative bg-white d-flex p-0">
 
@@ -190,11 +214,11 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">S.No</th>
-                                            <th scope="col">Images</th>
+                                            {{-- <th scope="col">Images</th> --}}
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Cost</th>
-                                            <th scope="col">Specifications</th>
+                                            {{-- <th scope="col">Specifications</th> --}}
                                             <th scope="col">Status</th>
                                             <th scope="col">Catagory</th>
                                             <th scope="col">Sub catagory</th>
@@ -203,12 +227,12 @@
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    {{-- <tbody>
                                         <?php $sn = 1; ?>
-                                    @foreach ($products as $product)
-                                    <tr>
-                                    <th scope="row">{{ $sn++ }}</th>
-                                     <td>
+                                        @foreach ($products as $product)
+                                            <tr>
+                                                <th scope="row">{{ $sn }}</th>
+                                                <td>
                                                     @foreach ($product_image as $image)
                                                         @if ($product->unique_id == $image->unique_id)
                                                             <img src="{{ asset('/storage/' . $image->path) }}"
@@ -227,11 +251,11 @@
                                                     @endforeach
                                                 </td>
                                                 <td>{{ $product->status }}</td>
-                                                <td>{{ $product->catagory }}</td>
-                                                <td>{{ $product->subcatagory }}</td> 
-                                    {{-- <td>{{ $product->created_at }}</td>
-                                                <td>{{ $product->updated_at }}</td> --}}
-                                    <td>
+                                                <td class="getcat{{$sn}}" id="getcat"></td>
+                                                <td class="getsubcat{{$sn}}" id="getsubcat"></td>
+                                                <td>{{ $product->created_at }}</td>
+                                                <td>{{ $product->updated_at }}</td>
+                                                <td>
                                                     <a href="{{ url('/admin/product/edit/' . $product->id) }}"
                                                         style="margin-right: 3mm"><i
                                                             class="bi bi-pencil-fill"></i></a>
@@ -242,8 +266,58 @@
                                                             class="bi bi-trash-fill"></i></a>
                                                 </td>
                                             </tr>
-                                    @endforeach 
-                                    </tbody>
+                                            <?php $sn++; ?>
+                                            <script>
+                                                var i=1,j=1;
+                                                $('#getcat').ready(function() {
+                                                    let catid = {{$product->catagory}};    
+                                                    console.log(catid);
+                                                    let csrf = '{{ csrf_token() }}';
+                                                    $.ajax({
+                                                        method: 'post',
+                                                        url: "{{ route('catitoa') }}",
+                                                        data: {
+                                                            _token: csrf,
+                                                            id: catid
+                                                        },
+                                                        success: function(res) {
+                                                            // console.log(res);
+                                                            if (res.status == 'success') {
+                                                                let all_categories = res.categories;
+                                                                console.log(all_categories.catagory);
+                                                        
+                                                                $('.getcat'+i).html(all_categories.catagory);
+                                                                i++;
+                                                            }
+                                                        }
+                                                    })
+                                                });
+                                                $('#getsubcat').ready(function() {
+                                                    let subcatid = {{$product->subcatagory}};    
+                                                    console.log(subcatid);
+                                                    let csrf = '{{ csrf_token() }}';
+                                                    $.ajax({
+                                                        method: 'post',
+                                                        url: "{{ route('subcatitoa') }}",
+                                                        data: {
+                                                            _token: csrf,
+                                                            id: subcatid
+                                                        },
+                                                        success: function(res) {
+                                                            // console.log(res);
+                                                            if (res.status == 'success') {
+                                                                let all_subcategories = res.subcategories;
+                                                                console.log(all_subcategories.subcatagory);
+                                                        
+                                                                $('.getsubcat'+j).html(all_subcategories.subcatagory);
+                                                                j++;
+                                                            }
+                                                        }
+                                                    })
+                                                });
+                                            </script> 
+                                        @endforeach
+                                    </tbody> --}}
                                 </table>
                             </div>
                         </div>
@@ -252,9 +326,10 @@
             </div>
             {{-- table end --}}
 
+            <div id="snackbar"></div>
 
 
-            {{-- <script>
+            <script>
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -287,7 +362,7 @@
                             // {
                             //     "img_data": "image_url",
                             //     "render": function(data) {
-                            //         let htdt = "<img src=""{{ asset('/storage/"+data+"')}}" width="40px">";
+                            //         let htdt = "<img src=""{{ asset('/storage/"+data+"') }}" width="40px">";
                             //         return htdt;
                             //     }
                             // }, 
@@ -301,7 +376,7 @@
                                 data: 'cost',
                             },
                             // {
-                            //     data: 'specifications'
+                            //     specifications : 'specifications'
                             // },
                             {
                                 data: 'status',
@@ -317,7 +392,8 @@
                                 orderable: false,
                                 searchable: false,
                                 render: function(data, type, row) {
-                                    return '<button class="btn btn-primary" onclick="tochange(' + row.id +
+                                    return '<button class="btn btn-primary popup" onclick="tochange(' + row
+                                        .id +
                                         ')">change</button>';
                                 }
                             },
@@ -338,12 +414,18 @@
                             id: id
                         },
                         success: function(res) {
-                            // console.log(res);
-                            if (res.status == 'success') {}
+                            console.log(res);
+                            var x = document.getElementById("snackbar");
+                            $('#snackbar').html(res.success)
+                            x.className = "show";
+                            setTimeout(function() {
+                                x.className = x.className.replace("show", "");
+                            }, 3000);
+                            location.reload(true);
                         }
                     })
                 }
-            </script> --}}
+            </script>
 
 
             <!-- Modal -->
@@ -375,9 +457,6 @@
                     });
                 });
             </script>
-
-
-
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">

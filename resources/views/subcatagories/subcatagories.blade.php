@@ -190,7 +190,7 @@
                                             <tr>
                                                 <th scope="row">{{ $sn }}</th>
 
-                                                <td class="getcat{{$sn}}" id="getcat{{$sn}}"></td>
+                                                <td class="getcat{{$sn}}" id="getcat"></td>
 
                                                 <td>{{ $subcat->subcatagory }}</td>
                                                 <td>{{ $subcat->subcatagory_status }}</td>
@@ -211,7 +211,7 @@
 
                                                 <script>
                                                     var i=1;
-                                                    $('#get_cat').ready(function() {
+                                                    $('#getcat').ready(function() {
                                                         let catid = {{$subcat->catagory}};    
                                                         console.log(catid);
                                                         let csrf = '{{ csrf_token() }}';

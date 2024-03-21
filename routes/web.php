@@ -103,6 +103,8 @@ Route::get('admin/subcatagory/delete/{id}', [CatagoryController::class, 'delete_
 
 Route::post('subcatagory/want/', [CatagoryController::class, 'wantsubcatagory'])->name('wantsubcatagory');
 
+Route::post('subcatagory/name/', [CatagoryController::class, 'subcatitoa'])->name('subcatitoa');
+
 Route::post('catbasedsubcatagory/want', [CatagoryController::class, 'want_cat_based_subcatagory'])->name('want_cat_based_subcatagory');
 
 
