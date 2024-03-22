@@ -525,47 +525,41 @@
             <script>
                 $(document).ready(function() {
                     var fileArr = [];
+                    var data = [];
+                    var src = [];
 
-
-
-
-
-
-                    $("#images").change(function() {
-                        // check if fileArr length is greater than 0
-                        if (fileArr.length > 0) fileArr = [];
+                    $("#images").ready(function() {
                         $('#image_preview').html("");
-
-                        let data = [{
+                        data = [{
                                 id: 1,
                                 src: 'https://picsum.photos/500/500?random=1',
-                                name:'a',
+                                name: 'a',
                             },
                             {
                                 id: 2,
                                 src: 'https://picsum.photos/500/500?random=2',
-                                name:'b',
+                                name: 'b',
                             },
-                            {
-                                id: 3,
-                                src: 'https://picsum.photos/500/500?random=3',
-                                name:'c',
-                            },
-                            {
-                                id: 4,
-                                src: 'https://picsum.photos/500/500?random=4',
-                                name:'d',
-                            },
-                            {
-                                id: 5,
-                                src: 'https://picsum.photos/500/500?random=5',
-                                name:'e',
-                            },
-                            {
-                                id: 6,
-                                src: 'https://picsum.photos/500/500?random=6',
-                                name:'f',
-                            },
+                            // {
+                            //     id: 3,
+                            //     src: 'https://picsum.photos/500/500?random=3',
+                            //     name:'c',
+                            // },
+                            // {
+                            //     id: 4,
+                            //     src: 'https://picsum.photos/500/500?random=4',
+                            //     name:'d',
+                            // },
+                            // {
+                            //     id: 5,
+                            //     src: 'https://picsum.photos/500/500?random=5',
+                            //     name:'e',
+                            // },
+                            // {
+                            //     id: 6,
+                            //     src: 'https://picsum.photos/500/500?random=6',
+                            //     name:'f',
+                            // },
                         ];
 
                         for (var i = 0; i < data.length; i++) {
@@ -573,11 +567,11 @@
                             $('#image_preview').append(
                                 "<div class='img-div' id='img-div" + i + "'>" +
                                 "<img src='" + data[i].src +
-                                "' class='img-responsive image img-thumbnail' title='" + total_file[i].name +
+                                "' class='img-responsive image img-thumbnail' title='" + data[i].name +
                                 "'>" +
                                 "<div class='middle'>" +
                                 "<button id='action-icon' value='img-div" + i +
-                                "' class='btn btn-danger' role='" + total_file[i].name + "'>" +
+                                "' class='btn btn-danger' role='" + data[i].name + "'>" +
                                 "<i class='fa fa-trash'></i>" +
                                 "</button>" +
                                 "</div>" +
@@ -585,18 +579,25 @@
                             );
                         }
 
+                    })
 
+
+
+                    $("#images").change(function() {
+                        // check if fileArr length is greater than 0
+                        if (fileArr.length > 0) fileArr = [];
+
+                        $('#image_preview').html("");
                         var total_file = document.getElementById("images").files;
-                        if (!total_file.length) {
-                            return;
-                        }
+                        if (!total_file.length) return;
+
                         for (var i = 0; i < total_file.length; i++) {
                             fileArr.push(total_file[i]);
                             $('#image_preview').append(
                                 "<div class='img-div' id='img-div" + i + "'>" +
                                 "<img src='" + URL.createObjectURL(event.target.files[i]) +
-                                "' class='img-responsive image img-thumbnail' title='" + total_file[i].name +
-                                "'>" +
+                                "' class='img-responsive image img-thumbnail' title='" + total_file[i]
+                                .name + "'>" +
                                 "<div class='middle'>" +
                                 "<button id='action-icon' value='img-div" + i +
                                 "' class='btn btn-danger' role='" + total_file[i].name + "'>" +
@@ -605,6 +606,7 @@
                                 "</div>" +
                                 "</div>"
                             );
+
                         }
                     });
 

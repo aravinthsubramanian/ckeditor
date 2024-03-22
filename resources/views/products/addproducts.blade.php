@@ -441,6 +441,8 @@
             <script>
                 $(document).ready(function() {
                     var fileArr = [];
+                    var src=[];
+                    
 
                     $("#images").change(function() {
                         // check if fileArr length is greater than 0
@@ -449,6 +451,7 @@
                         $('#image_preview').html("");
                         var total_file = document.getElementById("images").files;
                         if (!total_file.length) return;
+
                         for (var i = 0; i < total_file.length; i++) {
                             fileArr.push(total_file[i]);
                             $('#image_preview').append(
@@ -464,6 +467,7 @@
                                 "</div>" +
                                 "</div>"
                             );
+                            
                         }
                     });
 
