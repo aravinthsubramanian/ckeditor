@@ -40,11 +40,7 @@
 
         <!--Material Design Iconic Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!-- Image Uploader CSS -->
-        <link href="dist/image-uploader.min.css" rel="stylesheet">
 
-        <!-- Image Uploader Js -->
-        <script type="text/javascript" src="dist/image-uploader.min.js"></script>
     </head>
 
     <body>
@@ -476,8 +472,8 @@
                                             <label class="form-label" for="preview">Preview</label>
                                         </div>
                                         <div class="mt-1 text-center">
-                                            <div id="image_preview" style="width:100%;">
-                                            </div>
+                                            <div id="image_preview_old" style="width:100%;"></div>
+                                            <div id="image_preview" style="width:100%;"></div>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary" type="submit">Update</button>
@@ -525,63 +521,50 @@
             <script>
                 $(document).ready(function() {
                     var fileArr = [];
-                    var data = [];
-                    var src = [];
 
-                    $("#images").ready(function() {
-                        $('#image_preview').html("");
-                        data = [{
-                                id: 1,
-                                src: 'https://picsum.photos/500/500?random=1',
-                                name: 'a',
-                            },
-                            {
-                                id: 2,
-                                src: 'https://picsum.photos/500/500?random=2',
-                                name: 'b',
-                            },
-                            // {
-                            //     id: 3,
-                            //     src: 'https://picsum.photos/500/500?random=3',
-                            //     name:'c',
-                            // },
-                            // {
-                            //     id: 4,
-                            //     src: 'https://picsum.photos/500/500?random=4',
-                            //     name:'d',
-                            // },
-                            // {
-                            //     id: 5,
-                            //     src: 'https://picsum.photos/500/500?random=5',
-                            //     name:'e',
-                            // },
-                            // {
-                            //     id: 6,
-                            //     src: 'https://picsum.photos/500/500?random=6',
-                            //     name:'f',
-                            // },
-                        ];
+                    var pro_id = {{ $product->id }};
+                    let csrf = '{{ csrf_token() }}';
+                    $('#image_preview_old').html("");
+                    var img;
 
-                        for (var i = 0; i < data.length; i++) {
-                            fileArr.push(data[i]);
-                            $('#image_preview').append(
-                                "<div class='img-div' id='img-div" + i + "'>" +
-                                "<img src='" + data[i].src +
-                                "' class='img-responsive image img-thumbnail' title='" + data[i].name +
-                                "'>" +
-                                "<div class='middle'>" +
-                                "<button id='action-icon' value='img-div" + i +
-                                "' class='btn btn-danger' role='" + data[i].name + "'>" +
-                                "<i class='fa fa-trash'></i>" +
-                                "</button>" +
-                                "</div>" +
-                                "</div>"
-                            );
+                    $.ajax({
+                        method: 'post',
+                        url: "{{ route('want_pid_based_pimages') }}",
+                        data: {
+                            _token: csrf,
+                            id: pro_id
+                        },
+                        success: function(res) {
+                            // console.log(res);
+                            if (res.status == 'success') {
+                                let all_images = res.images;
+                                let spath = "{{ asset('/storage/value.path') }}";
+                                let pos = 0;
+                                console.log(all_images);
+                                $.each(all_images, function(index, value) {
+                                    // console.log(index);
+                                    var id = value.id;
+                                    var name = value.name;
+                                    var src = spath.replace("value.path", value.path);
+                                    $('#image_preview_old').append(
+                                        "<div class='img-div' id='img-div" + pos + "'>" +
+                                        "<img src=" + src +
+                                        " class='img-responsive image img-thumbnail' title='" + name +
+                                        "'>" +
+                                        "<div class='middle'>" +
+                                        "<button id='action-icon' value='img-div" + pos +
+                                        "' class='btn btn-danger' role='" + name + "'>" +
+                                        "<i class='fa fa-trash'></i>" +
+                                        "</button>" +
+                                        "</div>" +
+                                        "</div>"
+                                    );
+                                    // img = document.getElementById("img-div"+pos);
+                                    // fileArr.push(img);
+                                });
+                            }
                         }
-
                     })
-
-
 
                     $("#images").change(function() {
                         // check if fileArr length is greater than 0
@@ -614,7 +597,6 @@
                         var divName = this.value;
                         var fileName = $(this).attr('role');
                         $(`#${divName}`).remove();
-
                         for (var i = 0; i < fileArr.length; i++) {
                             if (fileArr[i].name === fileName) {
                                 fileArr.splice(i, 1);

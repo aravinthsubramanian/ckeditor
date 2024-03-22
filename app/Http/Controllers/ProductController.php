@@ -97,12 +97,12 @@ class ProductController extends Controller
         $subcatagory = SubCatagory::all();
         $catagory = MainCatagory::all();
         // dd($product);
-        $product_img = Product_image::where('unique_id', $unique_id)->get();
+        
         // dd($product_img);
         $product_spec = Product_spec::where('unique_id', $unique_id)->get();
         // dd($product_spec);
 
-        return view('products.editproducts', compact('product', 'product_img', 'product_spec', 'subcatagory', 'catagory'));
+        return view('products.editproducts', compact('product', 'product_spec', 'subcatagory', 'catagory'));
     }
 
 
@@ -159,5 +159,27 @@ class ProductController extends Controller
         // Product_spec::update($upload);
 
         return back()->with("success", "Updated Successfully...");
+    }
+
+    public function want_pid_based_pimages(Request $request)
+    {
+        $product = Product::find($request->id);
+        $unique_id = $product->unique_id;
+        $images = Product_image::where('unique_id', $unique_id)->get();
+        // $record = $record->toJson();
+        $data=[];
+        $i=0;
+        foreach($images as $img){
+            $data[$i]["id"]=$img->id;
+            $data[$i]["path"]=$img->path;
+            $data[$i++]["name"]=$img->title;
+        }
+        // $data=$data->toJson();
+        // dd($data);
+        
+        return response()->json([
+            'status' => 'success',
+            'images' => $data,
+        ]);
     }
 }

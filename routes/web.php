@@ -122,6 +122,8 @@ Route::post('/admin/product/update/{id}', [ProductController::class, 'updateprod
 
 Route::get('/admin/product/delete/{id}', [ProductController::class, 'deleteproduct']);
 
+Route::post('wantpidbasedpimages/want', [ProductController::class, 'want_pid_based_pimages'])->name('want_pid_based_pimages');
+
 
 
 
