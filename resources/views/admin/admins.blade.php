@@ -55,7 +55,7 @@
                     <a href="{{url('/admin/dashboard')}}" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="{{url('/admin/admins')}}" class="nav-item nav-link" active><i class="bi bi-shield"></i>Admins</a>
                     <a href="{{url('/admin/users')}}" class="nav-item nav-link"><i class="bi bi-people-fill"></i>Users</a>
-                    <a href="{{url('/admin/categories')}}" class="nav-item nav-link"><i class="bi bi-layers-fill"></i>Categories</a>
+                    <a href="{{url('/admin/catagories')}}" class="nav-item nav-link"><i class="bi bi-layers-fill"></i>Categories</a>
                     <a href="{{url('/admin/subcategories')}}" class="nav-item nav-link"><i class="bi bi-stack"></i>Subcategories</a>
                     <a href="{{url('/admin/products')}}" class="nav-item nav-link"><i class="bi bi-bag-fill"></i>Products</a>
 

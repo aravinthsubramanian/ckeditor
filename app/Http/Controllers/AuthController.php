@@ -46,6 +46,7 @@ class AuthController extends Controller
         ]);
         return back()->withSuccess('Registered successfully...'); 
     }
+    
     public function adminsignin(Request $request){
         $credentials = $request->validate([
             'email' => 'required',
@@ -54,10 +55,12 @@ class AuthController extends Controller
         if(Auth::guard('admin')->attempt($credentials))
         {
             $request->session()->regenerate();
+            // dd(Auth::guard('admin')->check());
             return redirect('admin/dashboard')->withSuccess('logged in successfully...');
         }
         return back()->withErrors('Invalid Username or Password...');
     }
+    
     public function usersignin(Request $request){
         $credentials = $request->validate([
             'email' => 'required',

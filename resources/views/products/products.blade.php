@@ -216,7 +216,7 @@
                                             <th scope="col">S.No</th>
                                             {{-- <th scope="col">Images</th> --}}
                                             <th scope="col">Product Name</th>
-                                            <th scope="col">Description</th>
+                                            {{-- <th scope="col">Description</th> --}}
                                             <th scope="col">Cost</th>
                                             {{-- <th scope="col">Specifications</th> --}}
                                             <th scope="col">Status</th>
@@ -369,9 +369,9 @@
                             {
                                 data: 'product',
                             },
-                            {
-                                data: 'description',
-                            },
+                            // {
+                            //     data: 'description',
+                            // },
                             {
                                 data: 'cost',
                             },

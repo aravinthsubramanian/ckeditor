@@ -46,7 +46,7 @@
                             </a>
                             <h3>Admin Sign In</h3>
                         </div>
-                        <form action="" method="POST">
+                        <form action="{{url('/admin/signin')}}" method="POST">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="email" placeholder="name@example.com"
