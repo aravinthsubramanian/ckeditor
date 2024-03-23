@@ -33,8 +33,7 @@
 
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
-
-        <!-- Sign In Start -->
+        <!-- Sign Up Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -44,57 +43,50 @@
                                 <h3 class="text-primary"><img width="30" height="30"
                                         src="https://img.icons8.com/nolan/64/laravel.png" alt="laravel" />CKeditor</h3>
                             </a>
-                            <h3>Admin Sign In</h3>
+                            <h3>Reset Password</h3>
                         </div>
-                        <form action="{{url('/admin/signin')}}" method="POST">
+                        <form action="{{ route('admin.updatepassword') }}" method="POST">
                             @csrf
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="email" placeholder="name@example.com"
-                                    name="email" value="{{ old('email') }}">
+                                <input type="text" class="form-control" id="email" name="email"
+                                    placeholder="name@example.com" value="{{ old('email') }}">
                                 <label for="email">Email address</label>
                                 @error('email')
                                     <p class='text-danger'>{{ $message }}</p>
                                 @enderror
                             </div>
+                            <input type="text" hidden id="token" name="token" value="{{$token}}">
                             <div class="form-floating mb-4">
-                                <input type="password" class="form-control" id="password" placeholder="Password"
-                                    name="password">
-                                <label for="password">Password</label>
-                                @error('password')
+                                <input type="password" class="form-control" id="new_password" name="new_password"
+                                    placeholder="Password">
+                                <label for="new_password">New Password</label>
+                                @error('new_password')
                                     <p class='text-danger'>{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                            {{-- <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div> --}}
-                            <a href="{{route('admin.forgotpass')}}">Forgot Password?</a>
-                        </div>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                            <p class="text-center mb-0">Don't have an Account? <a href="{{ url('/admin/signup') }}">Sign
-                                    Up</a></p>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="confirm_password"
+                                    name="confirm_password" placeholder="Password">
+                                <label for="confirm_password">Confirm Password</label>
+                                @error('confirm_password')
+                                    <p class='text-danger'>{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Change Password</button>
+                          
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sign In End -->
+        <!-- Sign Up End -->
     </div>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+  
 </body>
 
 </html>

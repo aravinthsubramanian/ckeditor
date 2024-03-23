@@ -5,6 +5,7 @@ use App\Http\Middleware\AuthAdmin;
 use App\Http\Middleware\AuthUser;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatagoryController;
+use App\Http\Controllers\ForgotpasswordController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PaginationController;
@@ -40,6 +41,10 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(UserCheck::class);
 
+Route::get('/admin/forgotpassword',function(){
+    return view('admin.forgotpassword');
+})->name('admin.forgotpass');
+
 
 
 
@@ -52,11 +57,15 @@ Route::get('/admin/admins', [PeopleController::class, 'show_admins'])->middlewar
 
 // Route::get('/admin/delete/{id}', [PeopleController::class, 'deleteadmins']);
 
-Route::post('/admin/signin', [AuthController::class, 'adminsignin']);
+Route::post('/admin/signin', [AuthController::class, 'adminsignin'])->name('admin.signin');
 Route::post('/admin/signup', [AuthController::class, 'adminsignup']);
 Route::post('/admin/signout', [AuthController::class, 'adminsignout'])->name('adminsignout');
 
+Route::post('/admin/forgotpassword', [ForgotpasswordController::class, 'adminforgotpassword'])->name('admin.forgotpassword');
 
+Route::get('/admin/resetpassword/{token}',[ForgotpasswordController::class, 'adminresetpassword'])->name('admin.resetpassword');
+
+Route::post('/admin/updatepassword', [ForgotpasswordController::class, 'adminupdatepassword'])->name('admin.updatepassword');
 
 
 // Users Routes...............................................................................................................

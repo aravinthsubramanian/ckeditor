@@ -44,9 +44,9 @@
                                 <h3 class="text-primary"><img width="30" height="30"
                                         src="https://img.icons8.com/nolan/64/laravel.png" alt="laravel" />CKeditor</h3>
                             </a>
-                            <h3>Admin Sign In</h3>
+                            <h3>Forgot Password</h3>
                         </div>
-                        <form action="{{url('/admin/signin')}}" method="POST">
+                        <form action="{{Route('admin.forgotpassword')}}" method="POST">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="email" placeholder="name@example.com"
@@ -56,24 +56,15 @@
                                     <p class='text-danger'>{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-floating mb-4">
-                                <input type="password" class="form-control" id="password" placeholder="Password"
-                                    name="password">
-                                <label for="password">Password</label>
-                                @error('password')
-                                    <p class='text-danger'>{{ $message }}</p>
-                                @enderror
-                            </div>
                             <div class="d-flex align-items-center justify-content-between mb-4">
                             {{-- <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div> --}}
-                            <a href="{{route('admin.forgotpass')}}">Forgot Password?</a>
+                            {{-- <a href="{{route('password.request')}}">Forgot Password?</a> --}}
                         </div>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                            <p class="text-center mb-0">Don't have an Account? <a href="{{ url('/admin/signup') }}">Sign
-                                    Up</a></p>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Get Mail</button>
+                            <p class="text-center mb-0">I have an Password? <a href="{{ url('/admin/signin') }}">SignIn</a></p>
                         </form>
                     </div>
                 </div>
@@ -85,16 +76,6 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
 </body>
 
 </html>
